@@ -32,10 +32,16 @@ h1 {
 fieldset {
   display: flex;
   justify-content: center;
+  margin: 1.2rem;
 }
 
 fieldset > :not(:last-child) {
   margin-right: 2rem;
+}
+
+label,
+input {
+  margin: 0.5rem;
 }
 
 .links ul {
@@ -45,6 +51,28 @@ fieldset > :not(:last-child) {
   display: flex;
   gap: 1.5rem;
   align-items: center;
+}
+
+input {
+  margin-bottom: 1.5rem;
+  padding: 0.1rem;
+  border-radius: 0.4rem;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
+  width: 80%;
+  margin: 0.5rem;
+  margin-top: 0.9rem;
+  border-radius: 0.3rem;
+  background-color: #b86cde;
+  color: white;
+  padding: 0.2rem;
 }
 
 .links a:hover {

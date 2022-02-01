@@ -8,11 +8,12 @@ import {
   Form,
   useTransition,
 } from "remix";
-import { db } from "~/utils/db.server";
-import stylesUrl from "../styles/login.css";
+import stylesUrl from "../styles/register.css";
 import { createUserSession } from "~/utils/session.server";
-import { signUp, login } from "~/utils/cognito.server";
+import { signUp } from "~/utils/cognito.server";
 import ValidationMessage from "~/components/ValidationMessage";
+import Button from "~/components/Button";
+import Input from "~/components/Input";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
@@ -20,8 +21,9 @@ export const links: LinksFunction = () => {
 
 export const meta: MetaFunction = () => {
   return {
-    title: "Oddfather | Login",
-    description: "Login to get access to today's best betting odds",
+    title: "Oddfather | Registration",
+    description:
+      "Create an Oddfather account to get access to today's best sports betting advice",
   };
 };
 
@@ -34,7 +36,16 @@ function validateEmail(email: unknown) {
 
 function validatePassword(password: unknown) {
   if (typeof password !== "string" || password.length < 8) {
-    return `Password must be at least 5 characters`;
+    return `Please choose a password with at least 8 characters`;
+  }
+}
+
+function validateConfirmPassword(password: unknown, confirmPassword: unknown) {
+  if (typeof confirmPassword !== "string") {
+    return `Error with password format`;
+  }
+  if (password !== confirmPassword) {
+    return `Passwords do not match`;
   }
 }
 
@@ -43,11 +54,12 @@ type ActionData = {
   fieldErrors?: {
     email: string | undefined;
     password: string | undefined;
+    confirmPassword: string | undefined;
   };
   fields?: {
-    loginType: string;
     email: string;
     password: string;
+    confirmPassword: string;
   };
 };
 
@@ -57,89 +69,58 @@ const badRequest = (data: ActionData) => {
 
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
-  const loginType = form.get("loginType");
   const email = form.get("email");
   const password = form.get("password");
-  const redirectTo = form.get("redirectTo") || "/games";
+  const confirmPassword = form.get("confirm-password");
   if (
-    typeof loginType !== "string" ||
     typeof email !== "string" ||
     typeof password !== "string" ||
-    typeof redirectTo !== "string"
+    typeof confirmPassword !== "string"
   ) {
     return badRequest({
       formError: `Form not submitted correctly`,
     });
   }
-
-  const fields = { loginType, email, password };
+  const fields = { email, password, confirmPassword };
   const fieldErrors = {
     email: validateEmail(email),
     password: validatePassword(password),
+    confirmPassword: validateConfirmPassword(password, confirmPassword),
   };
-  if (Object.values(fieldErrors).some(Boolean)) {
+  if (Object.values(fieldErrors).some(Boolean))
     return badRequest({ fieldErrors, fields });
-  }
 
-  const user = await login({ email, password });
-  if (!user) {
-    throw new Error(`Error logging user in`);
+  const newUser = await signUp({ email, password });
+  if (!newUser) {
+    return badRequest({
+      fields,
+      formError: `Something went wrong creating the new user`,
+    });
   }
-  const id = await user.getIdToken().getJwtToken();
-  return 1;
+  return newUser;
 };
 
-export default function Login() {
+export default function RegisterRoute() {
   const actionData = useActionData<ActionData>();
-  const [searchParams] = useSearchParams();
   const transition = useTransition();
+
   return (
     <div className="container">
-      <div className="content" data-light="">
-        <h1>Login</h1>
+      <div className="content">
+        <h1>Registration</h1>
         <Form
           method="post"
           aria-describedby={
             actionData?.formError ? "form-error-message" : undefined
           }
         >
-          <input
-            type="hidden"
-            name="redirectTo"
-            value={searchParams.get("redirectTo") ?? undefined}
-          />
-          <fieldset disabled={transition.state === "submitting"}>
-            <legend className="sr-only">Login or Register</legend>
-            <label>
-              <input
-                type="radio"
-                name="loginType"
-                value="login"
-                defaultChecked={
-                  !actionData?.fields?.loginType ||
-                  actionData?.fields?.loginType === "login"
-                }
-              />{" "}
-              Login
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="loginType"
-                value="register"
-                defaultChecked={actionData?.fields?.loginType === "register"}
-              />{" "}
-              Register
-            </label>
-          </fieldset>
-          <div className="input-container email-container">
+          <div className="input-container">
             <label htmlFor="email-input">Email</label>
             <input
               type="text"
               id="email-input"
               name="email"
-              defaultValue={actionData?.fields?.email}
-              aria-invalid={Boolean(actionData?.fieldErrors?.email)}
+              defaultValue={actionData?.fieldErrors?.email}
               aria-describedby={
                 actionData?.fieldErrors?.email ? "email-error" : undefined
               }
@@ -154,20 +135,19 @@ export default function Login() {
               />
             ) : null}
           </div>
-          <div className="input-container password-container">
+          <div className="input-container">
             <label htmlFor="password-input">Password</label>
             <input
               type="password"
               id="password-input"
               name="password"
-              defaultValue={actionData?.fields?.password}
-              aria-invalid={
-                Boolean(actionData?.fieldErrors?.password) || undefined
-              }
+              defaultValue={actionData?.fieldErrors?.password}
               aria-describedby={
                 actionData?.fieldErrors?.password ? "password-error" : undefined
               }
-              style={{ borderColor: actionData?.fieldErrors?.password }}
+              style={{
+                borderColor: actionData?.fieldErrors?.password ? "red" : "",
+              }}
             />
             {actionData?.fieldErrors?.password ? (
               <ValidationMessage
@@ -176,11 +156,28 @@ export default function Login() {
               />
             ) : null}
           </div>
-          <div id="form-error-message">
-            {actionData?.formError ? (
+          <div className="input-container">
+            <label htmlFor="confirm-password-input">Confirm Password</label>
+            <input
+              type="password"
+              id="confirm-password-input"
+              name="confirm-password"
+              defaultValue={actionData?.fieldErrors?.confirmPassword}
+              aria-describedby={
+                actionData?.fieldErrors?.confirmPassword
+                  ? "confirm-password-error"
+                  : undefined
+              }
+              style={{
+                borderColor: actionData?.fieldErrors?.confirmPassword
+                  ? "red"
+                  : "",
+              }}
+            />
+            {actionData?.fieldErrors?.confirmPassword ? (
               <ValidationMessage
                 isSubmitting={transition.state === "submitting"}
-                error={actionData?.formError}
+                error={actionData?.fieldErrors?.confirmPassword}
               />
             ) : null}
           </div>
@@ -191,30 +188,11 @@ export default function Login() {
               disabled={transition.state === "submitting"}
             >
               {transition.state === "submitting"
-                ? "Authenticating...."
-                : "Log In"}
+                ? "Registering...."
+                : "Register"}
             </button>
           </div>
         </Form>
-      </div>
-      <div className="links">
-        <ul>
-          <li>
-            <Link prefetch="intent" to="/">
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link prefetch="intent" to="/games">
-              Games
-            </Link>
-          </li>
-          <li>
-            <Link prefetch="intent" to="/teams">
-              Teams
-            </Link>
-          </li>
-        </ul>
       </div>
     </div>
   );

@@ -1,0 +1,9 @@
+.container {
+  display: inherit;
+}
+
+.container .content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

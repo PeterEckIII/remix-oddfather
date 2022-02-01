@@ -5,7 +5,6 @@ import {
   AuthenticationDetails,
   CognitoUserSession,
 } from "amazon-cognito-identity-js";
-import * as AWS from "aws-sdk/global";
 
 import { promisify } from "util";
 import awsmobile from "./awsExports";
@@ -41,35 +40,36 @@ export async function signUp({ email, password }: AccessCredentials) {
   }
 }
 
-export async function confirmSignUp({
-  email,
-  password,
-  code,
-}: AccessCredentials) {
-  if (!code) return new Error(`Must provide code`);
-  const poolData = {
-    UserPoolId: awsmobile.aws_user_pools_id,
-    ClientId: awsmobile.aws_user_pools_web_client_id,
-  };
-  const userPool = new CognitoUserPool(poolData);
+type ConfirmationCredentials = {
+  code: string;
+  email: string;
+};
 
-  const userData = {
-    Username: email,
-    Pool: userPool,
-  };
-  const cognitoUser = new CognitoUser(userData);
-  cognitoUser.confirmRegistration(code, true, (error, result) => {
-    if (error) {
-      JSON.stringify(error);
-      return error;
-    }
-    console.log(`Confirmation Result: ${JSON.stringify(result)}`);
-    return result;
+export async function confirmSignUp({ code, email }: ConfirmationCredentials) {
+  return new Promise((resolve, reject) => {
+    const poolData = {
+      UserPoolId: awsmobile.aws_user_pools_id,
+      ClientId: awsmobile.aws_user_pools_web_client_id,
+    };
+    const userPool = new CognitoUserPool(poolData);
+
+    const userData = {
+      Username: email,
+      Pool: userPool,
+    };
+    const cognitoUser = new CognitoUser(userData);
+    cognitoUser.confirmRegistration(code, true, (error, result) => {
+      if (error) {
+        console.log(`Error confirming user: ${error}`);
+        reject(error);
+      }
+      resolve(result);
+    });
   });
 }
 
 export async function login({ email, password }: AccessCredentials) {
-  return new Promise<CognitoUserSession>((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const authenticationData = {
       Username: email,
       Password: password,

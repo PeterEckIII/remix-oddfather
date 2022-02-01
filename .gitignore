@@ -6,3 +6,6 @@ node_modules
 .env
 
 /app/utils/awsExports.ts
+
+/prisma/games.ts
+/prisma/load.ts

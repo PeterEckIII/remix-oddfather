@@ -7,5 +7,4 @@ node_modules
 
 /app/utils/awsExports.ts
 
-/prisma/games.ts
-/prisma/load.ts
+/prisma/*

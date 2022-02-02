@@ -1,0 +1,17 @@
+.odds-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 10%;
+}
+
+.odds-button-content {
+  align-self: flex-end;
+  margin-right: 1.3rem;
+  border-left: 0.5px solid gray;
+}
+
+.odds-button-content:hover {
+  background-color: lightslategray;
+}

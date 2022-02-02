@@ -8,6 +8,7 @@ import {
 
 import { promisify } from "util";
 import awsmobile from "./awsExports";
+import { getUserSession } from "./session.server";
 
 type AccessCredentials = {
   email: string;
@@ -33,7 +34,6 @@ export async function signUp({ email, password }: AccessCredentials) {
 
   try {
     const res = await register({ email, password });
-    console.log(`Signup Success -- Result: ${JSON.stringify(res, null, 2)}`);
     return res;
   } catch (error) {
     console.error(`Error signing user up`);
@@ -46,7 +46,7 @@ type ConfirmationCredentials = {
 };
 
 export async function confirmSignUp({ code, email }: ConfirmationCredentials) {
-  return new Promise((resolve, reject) => {
+  return new Promise<CognitoUserSession>((resolve, reject) => {
     const poolData = {
       UserPoolId: awsmobile.aws_user_pools_id,
       ClientId: awsmobile.aws_user_pools_web_client_id,
@@ -69,7 +69,7 @@ export async function confirmSignUp({ code, email }: ConfirmationCredentials) {
 }
 
 export async function login({ email, password }: AccessCredentials) {
-  return new Promise((resolve, reject) => {
+  return new Promise<CognitoUserSession>((resolve, reject) => {
     const authenticationData = {
       Username: email,
       Password: password,
@@ -112,6 +112,13 @@ export async function getCurrentUser() {
   const userPool = new CognitoUserPool(poolData);
   const user = userPool.getCurrentUser();
   return user;
+}
+
+export async function getUserId(request: Request) {
+  const session = await getUserSession(request);
+  const userId = session.get("userId");
+  if (!userId || typeof userId !== "string") return null;
+  return userId;
 }
 
 export async function changePassword(

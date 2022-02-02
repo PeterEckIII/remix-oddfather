@@ -1,0 +1,7 @@
+.game-card-container {
+  display: flex;
+  margin: 2rem;
+  width: 325px;
+  background-color: lightgray;
+  border-radius: 1.5rem;
+}

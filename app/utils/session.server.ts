@@ -2,11 +2,6 @@ import bcrypt from "bcryptjs";
 import { createCookieSessionStorage, redirect } from "remix";
 import { db } from "./db.server";
 
-type LoginForm = {
-  username: string;
-  password: string;
-};
-
 const sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret) {
   throw new Error(`SESSION_SECRET must be set`);

@@ -6,5 +6,3 @@ node_modules
 .env
 
 /app/utils/awsExports.ts
-
-/prisma/*

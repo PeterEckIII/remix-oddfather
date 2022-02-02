@@ -1,5 +1,3 @@
-import { ReactNode } from "react";
-
 type ButtonProps = {
   transitionState: String;
   callToAction: String;

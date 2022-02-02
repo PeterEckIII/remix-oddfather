@@ -8,11 +8,12 @@ import {
   Form,
   useTransition,
 } from "remix";
-import { db } from "~/utils/db.server";
 import stylesUrl from "../styles/login.css";
 import { createUserSession } from "~/utils/session.server";
-import { signUp, login } from "~/utils/cognito.server";
+import { login } from "~/utils/cognito.server";
 import ValidationMessage from "~/components/ValidationMessage";
+import Input from "~/components/Input";
+import Button from "~/components/Button";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
@@ -26,10 +27,11 @@ export const meta: MetaFunction = () => {
 };
 
 function validateEmail(email: unknown) {
-  const regEx = new RegExp("^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$");
+  // const regEx = new RegExp("^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$");
   if (typeof email !== "string") return `Email address error`;
-  const formattedEmail = email.toLowerCase();
-  if (!formattedEmail.match(regEx)) return `Please enter a valid email address`;
+  // const formattedEmail = email.toLowerCase();
+  // if (!formattedEmail.match(regEx)) return `Please enter a valid email address`;
+  if (email.length < 8) return `Email address must be at least 8 characters`;
 }
 
 function validatePassword(password: unknown) {
@@ -45,7 +47,6 @@ type ActionData = {
     password: string | undefined;
   };
   fields?: {
-    loginType: string;
     email: string;
     password: string;
   };
@@ -57,36 +58,29 @@ const badRequest = (data: ActionData) => {
 
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
-  const loginType = form.get("loginType");
   const email = form.get("email");
   const password = form.get("password");
-  const redirectTo = form.get("redirectTo") || "/games";
-  if (
-    typeof loginType !== "string" ||
-    typeof email !== "string" ||
-    typeof password !== "string" ||
-    typeof redirectTo !== "string"
-  ) {
-    return badRequest({
-      formError: `Form not submitted correctly`,
-    });
+  if (typeof email !== "string" || typeof password !== "string") {
+    return badRequest({ formError: `Username and Password must be strings` });
   }
-
-  const fields = { loginType, email, password };
+  const fields = { email, password };
   const fieldErrors = {
     email: validateEmail(email),
     password: validatePassword(password),
   };
   if (Object.values(fieldErrors).some(Boolean)) {
+    console.log(`Errors: ${JSON.stringify(fieldErrors, null, 2)}`);
     return badRequest({ fieldErrors, fields });
   }
-
   const user = await login({ email, password });
   if (!user) {
-    throw new Error(`Error logging user in`);
+    return badRequest({
+      fieldErrors,
+      formError: `Email / Password combo is not correct`,
+    });
   }
-  const id = await user.getIdToken().getJwtToken();
-  return 1;
+  const userId = await user.getIdToken().getJwtToken();
+  return await createUserSession(userId, "/games");
 };
 
 export default function Login() {
@@ -108,74 +102,40 @@ export default function Login() {
             name="redirectTo"
             value={searchParams.get("redirectTo") ?? undefined}
           />
-          <fieldset disabled={transition.state === "submitting"}>
-            <legend className="sr-only">Login or Register</legend>
-            <label>
-              <input
-                type="radio"
-                name="loginType"
-                value="login"
-                defaultChecked={
-                  !actionData?.fields?.loginType ||
-                  actionData?.fields?.loginType === "login"
-                }
-              />{" "}
-              Login
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="loginType"
-                value="register"
-                defaultChecked={actionData?.fields?.loginType === "register"}
-              />{" "}
-              Register
-            </label>
-          </fieldset>
-          <div className="input-container email-container">
-            <label htmlFor="email-input">Email</label>
-            <input
-              type="text"
-              id="email-input"
-              name="email"
-              defaultValue={actionData?.fields?.email}
-              aria-invalid={Boolean(actionData?.fieldErrors?.email)}
-              aria-describedby={
-                actionData?.fieldErrors?.email ? "email-error" : undefined
-              }
-              style={{
-                borderColor: actionData?.fieldErrors?.email ? "red" : "",
-              }}
-            />
-            {actionData?.fieldErrors?.email ? (
-              <ValidationMessage
-                isSubmitting={transition.state === "submitting"}
-                error={actionData?.fieldErrors?.email}
-              />
-            ) : null}
-          </div>
-          <div className="input-container password-container">
-            <label htmlFor="password-input">Password</label>
-            <input
-              type="password"
-              id="password-input"
-              name="password"
-              defaultValue={actionData?.fields?.password}
-              aria-invalid={
-                Boolean(actionData?.fieldErrors?.password) || undefined
-              }
-              aria-describedby={
-                actionData?.fieldErrors?.password ? "password-error" : undefined
-              }
-              style={{ borderColor: actionData?.fieldErrors?.password }}
-            />
-            {actionData?.fieldErrors?.password ? (
-              <ValidationMessage
-                isSubmitting={transition.state === "submitting"}
-                error={actionData?.fieldErrors?.password}
-              />
-            ) : null}
-          </div>
+          <Input
+            type="text"
+            id="email-input"
+            name="email"
+            htmlFor="email"
+            labelText="Email"
+            defaultValue={actionData?.fields?.email}
+            invalid={Boolean(actionData?.fieldErrors?.email)}
+            describedBy={
+              actionData?.fieldErrors?.email ? "email-error" : undefined
+            }
+            isSubmitting={transition.state === "submitting"}
+            error={actionData?.fieldErrors?.email ?? undefined}
+            style={{
+              borderColor: actionData?.fieldErrors?.email ? "red" : "",
+            }}
+          />
+          <Input
+            type="password"
+            id="password-input"
+            name="password"
+            htmlFor="password"
+            labelText="Password"
+            defaultValue={actionData?.fields?.password}
+            invalid={Boolean(actionData?.fieldErrors?.password)}
+            describedBy={
+              actionData?.fieldErrors?.password ? "password-error" : undefined
+            }
+            isSubmitting={transition.state === "submitting"}
+            error={actionData?.fieldErrors?.password ?? undefined}
+            style={{
+              borderColor: actionData?.fieldErrors?.password ? "red" : "",
+            }}
+          />
           <div id="form-error-message">
             {actionData?.formError ? (
               <ValidationMessage
@@ -184,37 +144,12 @@ export default function Login() {
               />
             ) : null}
           </div>
-          <div className="button-container">
-            <button
-              className="button"
-              type="submit"
-              disabled={transition.state === "submitting"}
-            >
-              {transition.state === "submitting"
-                ? "Authenticating...."
-                : "Log In"}
-            </button>
-          </div>
+          <Button
+            transitionState={transition.state}
+            callToAction="Log In"
+            loadingText="Authenticating...."
+          />
         </Form>
-      </div>
-      <div className="links">
-        <ul>
-          <li>
-            <Link prefetch="intent" to="/">
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link prefetch="intent" to="/games">
-              Games
-            </Link>
-          </li>
-          <li>
-            <Link prefetch="intent" to="/teams">
-              Teams
-            </Link>
-          </li>
-        </ul>
       </div>
     </div>
   );

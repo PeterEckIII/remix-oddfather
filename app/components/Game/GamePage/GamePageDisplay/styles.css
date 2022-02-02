@@ -1,0 +1,70 @@
+.game-page-container {
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  box-shadow: 1px 1px #ccc;
+}
+
+.odds-container {
+  width: 100%;
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+h1 {
+  margin: 0.5rem;
+  text-align: center;
+}
+
+.heading {
+  margin-top: 0.5rem;
+  margin-bottom: -0.8rem;
+  display: flex;
+  justify-content: center;
+}
+
+.location-container {
+  display: flex;
+  direction: row;
+  justify-content: center;
+  align-items: center;
+  color: purple;
+  font-weight: 500;
+}
+
+.score-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.score-container > .score {
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+  font-size: 3rem;
+}
+
+.time-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  color: purple;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-content {
+  margin: 2rem;
+  margin-top: 2rem;
+}

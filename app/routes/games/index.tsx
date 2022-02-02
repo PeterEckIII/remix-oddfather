@@ -1,8 +1,9 @@
 import { Outlet, Link, useLoaderData, useCatch, Form } from "remix";
 import type { LoaderFunction } from "remix";
-import { Game, User } from "@prisma/client";
+import type { Game, User } from "@prisma/client";
 import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
+import { getCurrentUser } from "~/utils/cognito.server";
 
 type LoaderData = {
   user: User | null;
@@ -19,7 +20,7 @@ export let loader: LoaderFunction = async ({ request }) => {
       status: 404,
     });
   }
-  const user = await getUser(request);
+  const user = await getCurrentUser();
   const data: LoaderData = {
     user,
     games,

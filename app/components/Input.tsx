@@ -8,7 +8,9 @@ type InputProps = {
   defaultValue: string | undefined;
   invalid: boolean | undefined;
   describedBy: string | undefined;
-  style: any;
+  style?: any;
+  isSubmitting: boolean;
+  error: string | undefined;
   type: string;
 };
 
@@ -20,6 +22,8 @@ export default function Input({
   invalid,
   describedBy,
   type,
+  isSubmitting,
+  error,
   ...props
 }: InputProps & React.HTMLProps<HTMLInputElement>) {
   return (
@@ -34,6 +38,9 @@ export default function Input({
         aria-describedby={describedBy}
         {...props}
       />
+      {error ? (
+        <ValidationMessage isSubmitting={isSubmitting} error={error} />
+      ) : null}
     </div>
   );
 }

@@ -28,10 +28,11 @@ export const meta: MetaFunction = () => {
 };
 
 function validateEmail(email: unknown) {
-  const regEx = new RegExp("^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$");
+  // const regEx = new RegExp("^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$");
   if (typeof email !== "string") return `Email address error`;
-  const formattedEmail = email.toLowerCase();
-  if (!formattedEmail.match(regEx)) return `Please enter a valid email address`;
+  // const formattedEmail = email.toLowerCase();
+  // if (!formattedEmail.match(regEx)) return `Please enter a valid email address`;
+  if (email.length < 8) return `Email must be at least 8 characters`;
 }
 
 function validatePassword(password: unknown) {
@@ -97,7 +98,7 @@ export const action: ActionFunction = async ({ request }) => {
       formError: `Something went wrong creating the new user`,
     });
   }
-  return newUser;
+  return redirect(`/confirm-register?email=${email}`);
 };
 
 export default function RegisterRoute() {
@@ -114,84 +115,69 @@ export default function RegisterRoute() {
             actionData?.formError ? "form-error-message" : undefined
           }
         >
-          <div className="input-container">
-            <label htmlFor="email-input">Email</label>
-            <input
-              type="text"
-              id="email-input"
-              name="email"
-              defaultValue={actionData?.fieldErrors?.email}
-              aria-describedby={
-                actionData?.fieldErrors?.email ? "email-error" : undefined
-              }
-              style={{
-                borderColor: actionData?.fieldErrors?.email ? "red" : "",
-              }}
-            />
-            {actionData?.fieldErrors?.email ? (
+          <Input
+            type="text"
+            id="email-input"
+            name="email"
+            htmlFor="email"
+            labelText="Email"
+            defaultValue={actionData?.fields?.email}
+            invalid={Boolean(actionData?.fieldErrors?.email)}
+            describedBy={
+              actionData?.fieldErrors?.email ? "email-error" : undefined
+            }
+            isSubmitting={transition.state === "submitting"}
+            error={actionData?.fieldErrors?.email ?? undefined}
+            style={{
+              borderColor: actionData?.fieldErrors?.email ? "red" : "",
+            }}
+          />
+          <Input
+            type="password"
+            id="password-input"
+            name="password"
+            htmlFor="password"
+            labelText="Password"
+            defaultValue={actionData?.fields?.password}
+            invalid={Boolean(actionData?.fieldErrors?.password)}
+            describedBy={
+              actionData?.fieldErrors?.password ? "password-error" : undefined
+            }
+            isSubmitting={transition.state === "submitting"}
+            error={actionData?.fieldErrors?.password ?? undefined}
+            style={{
+              borderColor: actionData?.fieldErrors?.password ? "red" : "",
+            }}
+          />
+          <Input
+            type="password"
+            id="confirm-password-input"
+            name="confirm-password"
+            htmlFor="confirm-password-input"
+            labelText="Confirm Password"
+            defaultValue={actionData?.fieldErrors?.confirmPassword}
+            invalid={Boolean(actionData?.fieldErrors?.confirmPassword)}
+            describedBy={
+              actionData?.fieldErrors?.confirmPassword
+                ? "confirm-password-error"
+                : undefined
+            }
+            isSubmitting={transition.state === "submitting"}
+            error={actionData?.fieldErrors?.confirmPassword ?? undefined}
+          />
+          <div id="form-error-message">
+            {actionData?.formError ? (
               <ValidationMessage
                 isSubmitting={transition.state === "submitting"}
-                error={actionData?.fieldErrors?.email}
+                error={actionData?.formError}
               />
             ) : null}
           </div>
-          <div className="input-container">
-            <label htmlFor="password-input">Password</label>
-            <input
-              type="password"
-              id="password-input"
-              name="password"
-              defaultValue={actionData?.fieldErrors?.password}
-              aria-describedby={
-                actionData?.fieldErrors?.password ? "password-error" : undefined
-              }
-              style={{
-                borderColor: actionData?.fieldErrors?.password ? "red" : "",
-              }}
-            />
-            {actionData?.fieldErrors?.password ? (
-              <ValidationMessage
-                isSubmitting={transition.state === "submitting"}
-                error={actionData?.fieldErrors?.password}
-              />
-            ) : null}
-          </div>
-          <div className="input-container">
-            <label htmlFor="confirm-password-input">Confirm Password</label>
-            <input
-              type="password"
-              id="confirm-password-input"
-              name="confirm-password"
-              defaultValue={actionData?.fieldErrors?.confirmPassword}
-              aria-describedby={
-                actionData?.fieldErrors?.confirmPassword
-                  ? "confirm-password-error"
-                  : undefined
-              }
-              style={{
-                borderColor: actionData?.fieldErrors?.confirmPassword
-                  ? "red"
-                  : "",
-              }}
-            />
-            {actionData?.fieldErrors?.confirmPassword ? (
-              <ValidationMessage
-                isSubmitting={transition.state === "submitting"}
-                error={actionData?.fieldErrors?.confirmPassword}
-              />
-            ) : null}
-          </div>
-          <div className="button-container">
-            <button
-              className="button"
-              type="submit"
-              disabled={transition.state === "submitting"}
-            >
-              {transition.state === "submitting"
-                ? "Registering...."
-                : "Register"}
-            </button>
-          </div>
+          <Button
+            transitionState={transition.state}
+            callToAction="Sign Up"
+            loadingText="Registering...."
+          />
         </Form>
       </div>
     </div>

@@ -70,9 +70,9 @@ export const action: ActionFunction = async ({ request }) => {
       fields,
       formError: `Incorrect code. Please try registering again!`,
     });
-    // TODO: DELETE ACCOUNT AND START OVER OR RESEND VERIFICATION CODE
   }
-  return null;
+  const userId = res.getIdToken().getJwtToken();
+  return createUserSession(userId, `/games`);
 };
 
 export default function ConfirmRegisterRoute() {
@@ -95,24 +95,26 @@ export default function ConfirmRegisterRoute() {
             id="email"
             value={searchParams.get("email") ?? undefined}
           />
+          <input
+            type="hidden"
+            name="id"
+            id="id"
+            value={searchParams.get("id") ?? undefined}
+          />
           <Input
             type="text"
             id="code-input"
             labelText="Confirmation Code"
             defaultValue={actionData?.fieldErrors?.code}
             htmlFor="code"
+            isSubmitting={transition.state === "submitting"}
+            error={actionData?.fieldErrors?.code}
             invalid={Boolean(actionData?.fieldErrors?.code)}
             describedBy={
               actionData?.fieldErrors?.code ? "code-error" : undefined
             }
             style={{ borderColor: actionData?.fieldErrors?.code ? "red" : "" }}
           />
-          {actionData?.fieldErrors?.code ? (
-            <ValidationMessage
-              isSubmitting={transition.state === "submitting"}
-              error={actionData?.fieldErrors?.code}
-            />
-          ) : null}
           {actionData?.formError ? (
             <ValidationMessage
               isSubmitting={transition.state === "submitting"}

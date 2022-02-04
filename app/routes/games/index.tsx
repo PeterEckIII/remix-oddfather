@@ -2,11 +2,11 @@ import { Outlet, Link, useLoaderData, useCatch, Form } from "remix";
 import type { LoaderFunction } from "remix";
 import type { Game, User } from "@prisma/client";
 import { db } from "~/utils/db.server";
-import { getUser } from "~/utils/session.server";
-import { getCurrentUser } from "~/utils/cognito.server";
+import { getUser } from "~/utils/cognito.server";
+import { CognitoUser } from "amazon-cognito-identity-js";
 
 type LoaderData = {
-  user: User | null;
+  user: CognitoUser | null;
   games: Array<Game>;
 };
 
@@ -20,7 +20,7 @@ export let loader: LoaderFunction = async ({ request }) => {
       status: 404,
     });
   }
-  const user = await getCurrentUser();
+  const user = await getUser();
   const data: LoaderData = {
     user,
     games,

@@ -5,10 +5,66 @@ import {
   AuthenticationDetails,
   CognitoUserSession,
 } from "amazon-cognito-identity-js";
+import { createCookieSessionStorage, redirect } from "remix";
 
 import { promisify } from "util";
 import awsmobile from "./awsExports";
-import { getUserSession } from "./session.server";
+
+const storage = createCookieSessionStorage({
+  cookie: {
+    name: "OF_session",
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 30,
+    httpOnly: true,
+  },
+});
+
+export function getUserSession(request: Request) {
+  const cookie = storage.getSession(request.headers.get("Cookie")) || undefined;
+  return cookie;
+}
+
+export async function getUser() {
+  const poolData = {
+    UserPoolId: awsmobile.aws_user_pools_id,
+    ClientId: awsmobile.aws_user_pools_web_client_id,
+  };
+  const userPool = new CognitoUserPool(poolData);
+  const user = userPool.getCurrentUser();
+  return user;
+}
+
+export async function getUserId(request: Request) {
+  const session = await getUserSession(request);
+  const userId = session.get("userId");
+  if (!userId || typeof userId !== "string") return null;
+  return userId;
+}
+
+export async function requireUserId(
+  request: Request,
+  redirectTo: string = new URL(request.url).pathname
+) {
+  const session = await getUserSession(request);
+  const userId = session.get("userId");
+  if (!userId || typeof userId !== "string") {
+    const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
+    throw redirect(`/login?${searchParams}`);
+  }
+  return userId;
+}
+
+export async function createUserSession(userId: string, redirectTo: string) {
+  const session = await storage.getSession();
+  session.set("userId", userId);
+  return redirect(redirectTo, {
+    headers: {
+      "Set-Cookie": await storage.commitSession(session),
+    },
+  });
+}
 
 type AccessCredentials = {
   email: string;
@@ -96,36 +152,26 @@ export async function login({ email, password }: AccessCredentials) {
   });
 }
 
-export async function logout() {
-  const currentUser = await getCurrentUser();
+export async function logout(request: Request) {
+  const currentUser = await getUser();
   if (currentUser) {
-    return await currentUser.signOut();
+    const session = await storage.getSession(request.headers.get("Cookie"));
+    await storage.destroySession(session);
+    await currentUser.signOut();
+    return redirect(`/login`, {
+      headers: {
+        "Set-Cookie": "",
+      },
+    });
   }
-  return null;
-}
-
-export async function getCurrentUser() {
-  const poolData = {
-    UserPoolId: awsmobile.aws_user_pools_id,
-    ClientId: awsmobile.aws_user_pools_web_client_id,
-  };
-  const userPool = new CognitoUserPool(poolData);
-  const user = userPool.getCurrentUser();
-  return user;
-}
-
-export async function getUserId(request: Request) {
-  const session = await getUserSession(request);
-  const userId = session.get("userId");
-  if (!userId || typeof userId !== "string") return null;
-  return userId;
+  throw new Error(`Couldn't log out`);
 }
 
 export async function changePassword(
   currentPassword: string,
   newPassword: string
 ) {
-  const user = await getCurrentUser();
+  const user = await getUser();
   if (!user) {
     throw new Error(`Could not verify your credentials. Please log back in`);
   }
@@ -138,7 +184,7 @@ export async function changePassword(
 }
 
 export async function forgotPassword(code: string, newPassword: string) {
-  const user = await getCurrentUser();
+  const user = await getUser();
   if (!user) {
     throw new Error(
       `Your session has expired. Please login again to initiate a forgot password request`

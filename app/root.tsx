@@ -1,9 +1,23 @@
-import { LiveReload, Outlet, Links, useCatch, Meta, Scripts } from "remix";
+import {
+  LiveReload,
+  Outlet,
+  Links,
+  useCatch,
+  Meta,
+  Scripts,
+  LoaderFunction,
+  useLoaderData,
+} from "remix";
 import type { LinksFunction, MetaFunction } from "remix";
 import globalStylesUrl from "~/styles/globals.css";
 import globalMediumStylesUrl from "~/styles/globals-medium.css";
 import globalLargeStylesUrl from "~/styles/globals-large.css";
 import { ReactNode } from "react";
+
+import Navbar from "~/components/UI/Navbar";
+import UnauthNavbar from "./components/UI/UnauthNavbar";
+import { CognitoUser } from "amazon-cognito-identity-js";
+import { getUser, getUserSession } from "./utils/cognito.server";
 
 export const links: LinksFunction = () => {
   return [
@@ -52,6 +66,11 @@ export const meta: MetaFunction = () => {
   };
 };
 
+export let loader: LoaderFunction = async ({ request }) => {
+  const authenticated = await getUserSession(request);
+  return authenticated.data.userId ?? null;
+};
+
 function Document({
   children,
   title = `Oddfather Sports Betting`,
@@ -59,6 +78,7 @@ function Document({
   children: ReactNode;
   title?: string;
 }) {
+  const data = useLoaderData();
   return (
     <html lang="en">
       <head>
@@ -68,6 +88,7 @@ function Document({
         <Links />
       </head>
       <body>
+        {data ? <Navbar /> : <UnauthNavbar />}
         {children}
         <Scripts />
         {process.env.NODE_ENV === "development" ? <LiveReload /> : null}

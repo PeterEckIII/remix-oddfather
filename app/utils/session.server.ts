@@ -20,7 +20,7 @@ const storage = createCookieSessionStorage({
 });
 
 export function getUserSession(request: Request) {
-  return storage.getSession(request.headers.get("Cookie"));
+  return storage.getSession(request.headers.get("Cookie")) || undefined;
 }
 
 export async function getUserId(request: Request) {

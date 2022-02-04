@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef, MutableRefObject } from "react";
-import { DocumentNode, gql, Observer, TypedDocumentNode } from "@apollo/client";
-import { Game } from "~/types";
+import { useState, useEffect, useRef } from "react";
+import { DocumentNode, gql, TypedDocumentNode } from "@apollo/client";
 import { client } from "./api.server";
 
 type Variables = {
@@ -12,105 +11,71 @@ type Variables = {
 
 type FetchGamesProps = {
   token: string;
-  givenQuery: string | DocumentNode;
+  givenQuery: DocumentNode | TypedDocumentNode;
   variables: Variables;
 };
 
-type InfiniteScrollProps = {
-  initialGames: Game[];
-  initialToken: string;
-};
+interface Options {
+  callback: () => Promise<unknown>;
+  element: HTMLElement | null;
+  nextToken: string;
+  query: string;
+  variables: Variables;
+}
 
 export const useInfiniteScroll = ({
-  initialGames,
-  initialToken,
+  callback,
+  element,
+  nextToken,
   query,
-}: InfiniteScrollProps) => {
-  const [token, setToken] = useState<string>(initialToken);
+  variables,
+}: Options) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [games, setGames] = useState(initialGames);
-  const [error, setError] = useState<string | unknown>("");
-  const ref = useRef(null);
-  const isBottomVisible = useIntersectionObserver(ref, { threshold: 0 }, false);
-  const givenQuery = gql`
+  const [data, setData] = useState<any>(null);
+  const observer = useRef<IntersectionObserver>();
+  const nextQuery = gql`
     ${query}
   `;
 
-  const fetchMoreGames = async ({
+  const fetchNextGames = async ({
     token,
     givenQuery,
     variables,
   }: FetchGamesProps) => {
-    setLoading(true);
-    let params = { ...variables };
+    let params = { ...variables, nextToken: token };
     try {
       const result = await client.query({
-        query,
-        variables,
+        query: givenQuery,
+        variables: params,
       });
-      const data = result.data.QUERY;
-      const { items, nextToken } = data;
-      setGames((games) => [...games, ...items]);
-      setToken(nextToken);
+      const { data } = result;
+      setData(data);
+      return data;
     } catch (error) {
-      setError(error);
-      console.log(`Fetch error on useInfiniteScroll: ${error}`);
-    } finally {
-      setLoading(false);
+      console.log(`Error fetching next games: ${error}`);
+      throw new Error(`Error fetching more games: ${error}`);
     }
   };
 
   useEffect(() => {
-    isBottomVisible! &&
-      fetchMoreGames({ token, givenQuery, variables: params });
-  }, [isBottomVisible]);
-};
-
-export const useIntersectionObserver = (
-  ref: any,
-  options = {},
-  forward = true
-) => {
-  const [target, setTarget] = useState<HTMLElement | undefined>(undefined);
-  const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
-  const observer = useRef<React.RefObject<
-    MutableRefObject<IntersectionObserver>
-  > | null>(null);
-
-  const cleanObserver = (observer: any) => {
-    if (observer.current) {
-      observer.current.disconnect();
+    if (!element) {
+      return;
     }
-  };
-
-  useEffect(() => {
-    setTarget(ref.current);
-  }, [ref]);
-
-  useEffect(() => {
-    if (typeof observer === "undefined") {
-      throw new Error(`Error`);
-    }
-    if (!target) {
-      cleanObserver(observer);
-      const ob = (observer.current = new IntersectionObserver(
-        ([entry]) => {
-          const isElementIntersecting = entry.isIntersecting;
-          if (!forward) {
-            setIsIntersecting(isElementIntersecting);
-          } else if (forward && !isIntersecting && isElementIntersecting) {
-            setIsIntersecting(isElementIntersecting);
-            cleanObserver(observer);
-          }
-        },
-        { ...options }
-      ));
-      if (target) {
-        ob.observe(target);
+    observer.current = new IntersectionObserver(async (entries) => {
+      if (!loading && entries[0].isIntersecting) {
+        setLoading(true);
+        await fetchNextGames({
+          token: nextToken,
+          givenQuery: nextQuery,
+          variables,
+        });
+        callback().finally(() => setLoading(false));
       }
-      return () => {
-        cleanObserver(observer);
-      };
-    }
-  }, [target, options]);
+    });
+    observer.current.observe(element);
+
+    return () => observer.current?.disconnect();
+  }, [callback, loading, element]);
+
+  return [observer, loading, data];
 };

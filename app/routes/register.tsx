@@ -98,7 +98,7 @@ export const action: ActionFunction = async ({ request }) => {
       formError: `Something went wrong creating the new user`,
     });
   }
-  return redirect(`/confirm-register?email=${email}`);
+  await createUserSession(newUser?.userSub, `/confirm-register`);
 };
 
 export default function RegisterRoute() {

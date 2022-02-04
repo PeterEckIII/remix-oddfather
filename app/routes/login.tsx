@@ -72,6 +72,7 @@ export const action: ActionFunction = async ({ request }) => {
     console.log(`Errors: ${JSON.stringify(fieldErrors, null, 2)}`);
     return badRequest({ fieldErrors, fields });
   }
+
   const user = await login({ email, password });
   if (!user) {
     return badRequest({
@@ -79,6 +80,8 @@ export const action: ActionFunction = async ({ request }) => {
       formError: `Email / Password combo is not correct`,
     });
   }
+  const cookie = await request.headers.get("Cookie");
+  console.log(`Cookie from LOGIN PAGE: ${cookie}`);
   const userId = await user.getIdToken().getJwtToken();
   return await createUserSession(userId, "/games");
 };

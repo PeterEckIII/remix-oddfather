@@ -1,0 +1,23 @@
+.table-name {
+  margin-top: 2rem;
+}
+
+.table-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.table {
+  border-collapse: separate;
+}
+
+.table-header-item {
+  text-align: center;
+}
+
+@media (max-width: 800px) {
+  .table-container {
+    width: 80%;
+  }
+}

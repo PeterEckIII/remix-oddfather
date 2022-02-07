@@ -1,3 +1,3 @@
-import GameDay from "./GameDay";
+import GameDay from './GameDay';
 
 export default GameDay;

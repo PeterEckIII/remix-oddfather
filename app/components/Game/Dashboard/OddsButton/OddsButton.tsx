@@ -1,16 +1,16 @@
-import type { LinksFunction } from "remix";
-import { Link } from "remix";
-import styles from "./styles.css";
+import type { LinksFunction } from 'remix';
+import { Link } from 'remix';
+import styles from './styles.css';
 
-export const link: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
+export const link: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
 
 type OddsButtonProps = {
   gameId: string;
 };
 
 const OddsButton = ({ gameId }: OddsButtonProps) => (
-  <div className="odds-button-container">
-    <div className="odds-button-content">
+  <div className='odds-button-container'>
+    <div className='odds-button-content'>
       {/* need chevron logo */}
       <Link to={`/games/${gameId}`} />
     </div>

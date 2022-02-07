@@ -1,4 +1,4 @@
-import { Outlet } from "remix";
+import { Outlet } from 'remix';
 
 export default function GamesRoute() {
   return (

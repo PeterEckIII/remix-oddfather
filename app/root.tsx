@@ -7,47 +7,47 @@ import {
   Scripts,
   LoaderFunction,
   useLoaderData,
-} from "remix";
-import type { LinksFunction, MetaFunction } from "remix";
-import globalStylesUrl from "~/styles/globals.css";
-import globalMediumStylesUrl from "~/styles/globals-medium.css";
-import globalLargeStylesUrl from "~/styles/globals-large.css";
-import { ReactNode } from "react";
+} from 'remix';
+import type { LinksFunction, MetaFunction } from 'remix';
+import globalStylesUrl from '~/styles/globals.css';
+import globalMediumStylesUrl from '~/styles/globals-medium.css';
+import globalLargeStylesUrl from '~/styles/globals-large.css';
+import { ReactNode } from 'react';
 
-import Navbar from "~/components/UI/Navbar";
-import UnauthNavbar from "./components/UI/UnauthNavbar";
-import { getUserSession } from "./utils/cognito.server";
+import Navbar from '~/components/UI/Navbar';
+import UnauthNavbar from './components/UI/UnauthNavbar';
+import { getUserSession } from './utils/cognito.server';
 
 export const links: LinksFunction = () => {
   return [
     {
-      rel: "stylesheet",
+      rel: 'stylesheet',
       href: globalStylesUrl,
     },
     {
-      rel: "stylesheet",
+      rel: 'stylesheet',
       href: globalMediumStylesUrl,
     },
     {
-      rel: "stylesheet",
+      rel: 'stylesheet',
       href: globalLargeStylesUrl,
     },
     {
-      rel: "preconnect",
-      href: "https://fonts.googleapis.com",
+      rel: 'preconnect',
+      href: 'https://fonts.googleapis.com',
     },
     {
-      rel: "preconnect",
-      href: "https://fonts.gstatic.com",
-      crossOrigin: "anonymous",
+      rel: 'preconnect',
+      href: 'https://fonts.gstatic.com',
+      crossOrigin: 'anonymous',
     },
     {
-      rel: "stylesheet",
-      href: "https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap",
+      rel: 'stylesheet',
+      href: 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap',
     },
     {
-      rel: "stylesheet",
-      href: "https://unpkg.com/modern-css-reset@1.4.0/dist/reset.min.css",
+      rel: 'stylesheet',
+      href: 'https://unpkg.com/modern-css-reset@1.4.0/dist/reset.min.css',
     },
   ];
 };
@@ -57,11 +57,11 @@ export const meta: MetaFunction = () => {
   return {
     description,
     keywords:
-      "Oddfather,betting,bet,odds,gambling,stakes,spread,moneyline,money line,over/under,over under",
-    "twitter:creator": "@jpeckiii",
-    "twitter:site": "@jpeckiii",
-    "twitter:title": "Oddfather Betting",
-    "twitter:description": description,
+      'Oddfather,betting,bet,odds,gambling,stakes,spread,moneyline,money line,over/under,over under',
+    'twitter:creator': '@jpeckiii',
+    'twitter:site': '@jpeckiii',
+    'twitter:title': 'Oddfather Betting',
+    'twitter:description': description,
   };
 };
 
@@ -73,15 +73,16 @@ export let loader: LoaderFunction = async ({ request }) => {
 function Document({
   children,
   title = `Oddfather Sports Betting`,
+  data,
 }: {
   children: ReactNode;
   title?: string;
+  data?: any;
 }) {
-  const data = useLoaderData();
   return (
-    <html lang="en">
+    <html lang='en'>
       <head>
-        <meta charSet="utf-8" />
+        <meta charSet='utf-8' />
         <Meta />
         <title>{title}</title>
         <Links />
@@ -90,15 +91,16 @@ function Document({
         {data ? <Navbar /> : <UnauthNavbar />}
         {children}
         <Scripts />
-        {process.env.NODE_ENV === "development" ? <LiveReload /> : null}
+        {process.env.NODE_ENV === 'development' ? <LiveReload /> : null}
       </body>
     </html>
   );
 }
 
 export default function App() {
+  const data = useLoaderData();
   return (
-    <Document>
+    <Document data={data}>
       <Outlet />
     </Document>
   );
@@ -108,7 +110,7 @@ export function CatchBoundary() {
   const caught = useCatch();
   return (
     <Document title={`${caught.status} ${caught.statusText}`}>
-      <div className="error-container">
+      <div className='error-container'>
         <h1>
           {caught.status} -- {caught.statusText}
         </h1>
@@ -120,8 +122,8 @@ export function CatchBoundary() {
 export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error);
   return (
-    <Document title="Oh no!">
-      <div className="error-container">
+    <Document title='Oh no!'>
+      <div className='error-container'>
         <h1>Application Error</h1>
         <pre>{error.message}</pre>
       </div>

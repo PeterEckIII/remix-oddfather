@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from "react";
-import { DocumentNode, gql, TypedDocumentNode } from "@apollo/client";
-import { client } from "./api.server";
+import { useState, useEffect, useRef } from 'react';
+import { DocumentNode, gql, TypedDocumentNode } from '@apollo/client';
+import { client } from './api.server';
 
 type Variables = {
   type?: string;
   limit?: number;
-  sortDirection?: "DESC" | "ASC";
+  sortDirection?: 'DESC' | 'ASC';
   nextToken?: string;
 };
 
@@ -61,7 +61,7 @@ export const useInfiniteScroll = ({
     if (!element) {
       return;
     }
-    observer.current = new IntersectionObserver(async (entries) => {
+    observer.current = new IntersectionObserver(async entries => {
       if (!loading && entries[0].isIntersecting) {
         setLoading(true);
         await fetchNextGames({

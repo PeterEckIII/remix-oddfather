@@ -1,5 +1,5 @@
-import { createAuthLink, AUTH_TYPE } from "aws-appsync-auth-link";
-import { createSubscriptionHandshakeLink } from "aws-appsync-subscription-link";
+import { createAuthLink, AUTH_TYPE } from 'aws-appsync-auth-link';
+import { createSubscriptionHandshakeLink } from 'aws-appsync-subscription-link';
 import {
   createHttpLink,
   InMemoryCache,
@@ -7,8 +7,8 @@ import {
   ApolloClient,
   from,
   split,
-} from "@apollo/client";
-import config from "./awsExports";
+} from '@apollo/client';
+import config from './awsExports';
 
 const httpLink = createHttpLink({ uri: config.aws_appsync_graphqlEndpoint });
 
@@ -24,9 +24,9 @@ export const client = new ApolloClient({
       },
     }),
     split(
-      (op) => {
+      op => {
         const { operation } = op.query.definitions[0] as any;
-        if (operation === "subscription") {
+        if (operation === 'subscription') {
           return false;
         }
         return true;

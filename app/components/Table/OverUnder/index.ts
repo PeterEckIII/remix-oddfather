@@ -1,3 +1,3 @@
-import OverUnderTable from "./OverUnderTable";
+import OverUnderTable from './OverUnderTable';
 
 export default OverUnderTable;

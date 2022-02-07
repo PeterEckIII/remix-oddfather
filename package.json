@@ -11,7 +11,8 @@
     "dev": "remix dev",
     "postinstall": "remix setup node",
     "start": "remix-serve build",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "format": "npx prettier --write ."
   },
   "dependencies": {
     "@apollo/client": "^3.5.8",

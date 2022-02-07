@@ -1,3 +1,3 @@
-import SpreadTable from "./SpreadTable";
+import SpreadTable from './SpreadTable';
 
 export default SpreadTable;

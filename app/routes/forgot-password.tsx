@@ -1,4 +1,4 @@
-import type { ActionFunction } from "remix";
+import type { ActionFunction } from 'remix';
 import {
   redirect,
   Form,
@@ -7,18 +7,18 @@ import {
   json,
   useSearchParams,
   useTransition,
-} from "remix";
-import ValidationMessage from "~/components/ValidationMessage";
-import { forgotPassword } from "~/utils/cognito.server";
+} from 'remix';
+import ValidationMessage from '~/components/ValidationMessage';
+import { forgotPassword } from '~/utils/cognito.server';
 
 function validateCode(code: unknown) {
-  if (typeof code !== "string" || code.length < 5) {
+  if (typeof code !== 'string' || code.length < 5) {
     return `Code must be at least 5 characters`;
   }
 }
 
 function validateNewPassword(newPassword: unknown) {
-  if (typeof newPassword !== "string" || newPassword.length < 6) {
+  if (typeof newPassword !== 'string' || newPassword.length < 6) {
     return `Password must be at least 6 characters`;
   }
 }
@@ -41,13 +41,13 @@ const badRequest = (data: ActionData) => {
 
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
-  const code = form.get("code");
-  const newPassword = form.get("newPassword");
-  const redirectTo = form.get("redirectTo") || "/games";
+  const code = form.get('code');
+  const newPassword = form.get('newPassword');
+  const redirectTo = form.get('redirectTo') || '/games';
   if (
-    typeof code !== "string" ||
-    typeof newPassword !== "string" ||
-    typeof redirectTo !== "string"
+    typeof code !== 'string' ||
+    typeof newPassword !== 'string' ||
+    typeof redirectTo !== 'string'
   ) {
     return badRequest({
       formError: `Form not submitted correctly`,
@@ -69,87 +69,87 @@ export default function ForgotPassword() {
   const [searchParams] = useSearchParams();
   const transition = useTransition();
   return (
-    <div className="container">
-      <div className="content">
+    <div className='container'>
+      <div className='content'>
         <h1>Forgot Password</h1>
         <Form
-          method="post"
+          method='post'
           aria-describedby={
-            actionData?.formError ? "form-error-message" : undefined
+            actionData?.formError ? 'form-error-message' : undefined
           }
         >
           <input
-            type="hidden"
-            name="redirectTo"
-            value={searchParams.get("redirectTo") ?? undefined}
+            type='hidden'
+            name='redirectTo'
+            value={searchParams.get('redirectTo') ?? undefined}
           />
           <div>
-            <label htmlFor="code-input">Confirmation Code</label>
+            <label htmlFor='code-input'>Confirmation Code</label>
             <input
-              type="text"
-              id="code-input"
-              name="code"
+              type='text'
+              id='code-input'
+              name='code'
               aria-invalid={Boolean(actionData?.fieldErrors?.code)}
               aria-describedby={
-                actionData?.fieldErrors?.code ? "code-error" : undefined
+                actionData?.fieldErrors?.code ? 'code-error' : undefined
               }
               style={{
-                borderColor: actionData?.fieldErrors?.code ? "red" : "",
+                borderColor: actionData?.fieldErrors?.code ? 'red' : '',
               }}
             />
             {actionData?.fieldErrors?.code ? (
               <ValidationMessage
-                isSubmitting={transition.state === "submitting"}
+                isSubmitting={transition.state === 'submitting'}
                 error={actionData?.fieldErrors?.code}
               />
             ) : null}
           </div>
           <div>
-            <label htmlFor="newPassword-input">New Password</label>
+            <label htmlFor='newPassword-input'>New Password</label>
             <input
-              type="password"
-              id="newPassword-input"
-              name="newPassword"
+              type='password'
+              id='newPassword-input'
+              name='newPassword'
               aria-invalid={Boolean(actionData?.fieldErrors?.newPassword)}
               aria-describedby={
                 actionData?.fieldErrors?.newPassword
-                  ? "newPassword-error"
+                  ? 'newPassword-error'
                   : undefined
               }
               style={{
-                borderColor: actionData?.fieldErrors?.newPassword ? "red" : "",
+                borderColor: actionData?.fieldErrors?.newPassword ? 'red' : '',
               }}
             />
             {actionData?.fieldErrors?.newPassword ? (
               <ValidationMessage
-                isSubmitting={transition.state === "submitting"}
+                isSubmitting={transition.state === 'submitting'}
                 error={actionData?.fieldErrors?.newPassword}
               />
             ) : null}
           </div>
-          <div id="form-error-message">
+          <div id='form-error-message'>
             {actionData?.formError ? (
               <ValidationMessage
-                isSubmitting={transition.state === "submitting"}
+                isSubmitting={transition.state === 'submitting'}
                 error={actionData?.formError}
               />
             ) : null}
           </div>
           <button
-            type="submit"
-            className="button"
-            disabled={transition.state === "submitting"}
+            type='submit'
+            className='button'
+            disabled={transition.state === 'submitting'}
           >
-            {transition.state === "submitting"
-              ? "Changing...."
-              : "Change Password"}
+            {transition.state === 'submitting'
+              ? 'Changing....'
+              : 'Change Password'}
           </button>
         </Form>
       </div>
-      <div className="links">
+      <div className='links'>
         <ul>
           <li>
-            <Link prefetch="intent" to="/">
+            <Link prefetch='intent' to='/'>
               Home
             </Link>
           </li>

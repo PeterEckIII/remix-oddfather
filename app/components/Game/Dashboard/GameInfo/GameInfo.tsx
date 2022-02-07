@@ -1,10 +1,10 @@
-import styles from "./styles.css";
-import { LinksFunction } from "remix";
+import styles from './styles.css';
+import { LinksFunction } from 'remix';
 
-import Time from "../Time";
-import Venue from "../Venue";
+import Time from '../Time';
+import Venue from '../Venue';
 
-export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
 
 type GameInfoProps = {
   datetimeEpoch: number;
@@ -14,8 +14,8 @@ type GameInfoProps = {
 };
 
 const GameInfo = ({ datetimeEpoch, venue, city, state }: GameInfoProps) => (
-  <div className="game-info-container">
-    <div className="game-info-content">
+  <div className='game-info-container'>
+    <div className='game-info-content'>
       <Time datetimeEpoch={datetimeEpoch} />
       <Venue venue={venue} />
     </div>

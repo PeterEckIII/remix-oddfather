@@ -1,3 +1,3 @@
-import GameCard from "./GameCard";
+import GameCard from './GameCard';
 
 export default GameCard;

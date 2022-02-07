@@ -1,16 +1,16 @@
 const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
 interface MonthDictionary {
@@ -18,21 +18,21 @@ interface MonthDictionary {
 }
 
 const monthShorthand: MonthDictionary = {
-  January: "Jan",
-  February: "Feb",
-  March: "Mar",
-  April: "Apr",
-  May: "May",
-  June: "Jun",
-  July: "Jul",
-  August: "Aug",
-  September: "Sep",
-  October: "Oct",
-  November: "Nov",
-  December: "Dec",
+  January: 'Jan',
+  February: 'Feb',
+  March: 'Mar',
+  April: 'Apr',
+  May: 'May',
+  June: 'Jun',
+  July: 'Jul',
+  August: 'Aug',
+  September: 'Sep',
+  October: 'Oct',
+  November: 'Nov',
+  December: 'Dec',
 };
 
-const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 const getYear = (d: Date | string) => {
   const newDate = new Date(d);
@@ -66,7 +66,7 @@ const getDay = (d: Date | string) => {
 const trimTime = (d: Date | string) => {
   const newDate = new Date(d);
   let time = newDate.toLocaleTimeString();
-  let newTime = time.replace(":00 ", "");
+  let newTime = time.replace(':00 ', '');
   return newTime;
 };
 

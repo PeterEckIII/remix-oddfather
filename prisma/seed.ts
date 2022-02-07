@@ -1,14 +1,14 @@
-import { prisma, Prisma, PrismaClient } from "@prisma/client";
+import { prisma, Prisma, PrismaClient } from '@prisma/client';
 const db = new PrismaClient();
-import { v4 as uuidv4 } from "uuid";
-import games from "./games";
+import { v4 as uuidv4 } from 'uuid';
+import games from './games';
 
 async function getUser() {
   return await db.user.create({
     data: {
-      username: "test",
+      username: 'test',
       passwordHash:
-        "$2b$10$K7L1OJ45/4Y2nIvhRVpCe.FSmhDdWoXehVzJptJ/op0lSsvqNu/1u",
+        '$2b$10$K7L1OJ45/4Y2nIvhRVpCe.FSmhDdWoXehVzJptJ/op0lSsvqNu/1u',
     },
   });
 }
@@ -16,7 +16,7 @@ async function getUser() {
 getUser();
 
 async function getGames() {
-  games.map(async (game) => {
+  games.map(async game => {
     return await db.game.create({
       data: {
         id: uuidv4(),

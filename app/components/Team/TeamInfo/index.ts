@@ -1,3 +1,3 @@
-import TeamInfo from "./TeamInfo";
+import TeamInfo from './TeamInfo';
 
 export default TeamInfo;

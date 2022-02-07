@@ -4,25 +4,25 @@ import {
   CognitoUser,
   AuthenticationDetails,
   CognitoUserSession,
-} from "amazon-cognito-identity-js";
-import { createCookieSessionStorage, redirect } from "remix";
+} from 'amazon-cognito-identity-js';
+import { createCookieSessionStorage, redirect } from 'remix';
 
-import { promisify } from "util";
-import awsmobile from "./awsExports";
+import { promisify } from 'util';
+import awsmobile from './awsExports';
 
 const storage = createCookieSessionStorage({
   cookie: {
-    name: "OF_session",
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
+    name: 'OF_session',
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
     maxAge: 60 * 60 * 24 * 30,
     httpOnly: true,
   },
 });
 
 export function getUserSession(request: Request) {
-  const cookie = storage.getSession(request.headers.get("Cookie")) || undefined;
+  const cookie = storage.getSession(request.headers.get('Cookie')) || undefined;
   return cookie;
 }
 
@@ -38,8 +38,8 @@ export async function getUser() {
 
 export async function getUserId(request: Request) {
   const session = await getUserSession(request);
-  const userId = session.get("userId");
-  if (!userId || typeof userId !== "string") return null;
+  const userId = session.get('userId');
+  if (!userId || typeof userId !== 'string') return null;
   return userId;
 }
 
@@ -48,9 +48,9 @@ export async function requireUserId(
   redirectTo: string = new URL(request.url).pathname
 ) {
   const session = await getUserSession(request);
-  const userId = session.get("userId");
-  if (!userId || typeof userId !== "string") {
-    const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
+  const userId = session.get('userId');
+  if (!userId || typeof userId !== 'string') {
+    const searchParams = new URLSearchParams([['redirectTo', redirectTo]]);
     throw redirect(`/login?${searchParams}`);
   }
   return userId;
@@ -58,10 +58,10 @@ export async function requireUserId(
 
 export async function createUserSession(userId: string, redirectTo: string) {
   const session = await storage.getSession();
-  session.set("userId", userId);
+  session.set('userId', userId);
   return redirect(redirectTo, {
     headers: {
-      "Set-Cookie": await storage.commitSession(session),
+      'Set-Cookie': await storage.commitSession(session),
     },
   });
 }
@@ -79,7 +79,7 @@ export async function signUp({ email, password }: AccessCredentials) {
   });
   const register = ({ email, password }: AccessCredentials) => {
     const emailAttribute = new CognitoUserAttribute({
-      Name: "email",
+      Name: 'email',
       Value: email,
     });
 
@@ -142,10 +142,10 @@ export async function login({ email, password }: AccessCredentials) {
     };
     const cognitoUser = new CognitoUser(userData);
     cognitoUser.authenticateUser(authenticationDetails, {
-      onSuccess: (result) => {
+      onSuccess: result => {
         resolve(result);
       },
-      onFailure: (error) => {
+      onFailure: error => {
         reject(error);
       },
     });
@@ -155,12 +155,12 @@ export async function login({ email, password }: AccessCredentials) {
 export async function logout(request: Request) {
   const currentUser = await getUser();
   if (currentUser) {
-    const session = await storage.getSession(request.headers.get("Cookie"));
+    const session = await storage.getSession(request.headers.get('Cookie'));
     await storage.destroySession(session);
     await currentUser.signOut();
     return redirect(`/login`, {
       headers: {
-        "Set-Cookie": "",
+        'Set-Cookie': '',
       },
     });
   }
@@ -191,17 +191,17 @@ export async function forgotPassword(code: string, newPassword: string) {
     );
   }
   user.forgotPassword({
-    onSuccess: (data) => {
+    onSuccess: data => {
       user.confirmPassword(code, newPassword, {
-        onSuccess: (data) => {
+        onSuccess: data => {
           console.log(`Successfully reset your password!`);
         },
-        onFailure: (error) => {
+        onFailure: error => {
           throw new Error(`There was an error confirming the code: ${error}`);
         },
       });
     },
-    onFailure: (error) => {
+    onFailure: error => {
       throw new Error(
         `Could not complete the forgot password request: ${error}`
       );

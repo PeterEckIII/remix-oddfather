@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 type ValidationProps = {
   error: String;
@@ -21,9 +21,9 @@ export default function ValidationMessage({
     <div
       style={{
         opacity: show ? 1 : 0,
-        height: show ? "1rem" : 0,
-        color: "red",
-        transition: "all 300ms ease-in-out",
+        height: show ? '1rem' : 0,
+        color: 'red',
+        transition: 'all 300ms ease-in-out',
       }}
     >
       {error}

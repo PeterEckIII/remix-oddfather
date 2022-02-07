@@ -7,7 +7,7 @@ const Time = ({ datetimeEpoch }: TimeProps) => {
   // formatDateForGameCard(datetimeEpoch)
   return (
     <div>
-      <p className="gametime">{datetimeEpoch}</p>
+      <p className='gametime'>{datetimeEpoch}</p>
     </div>
   );
 };

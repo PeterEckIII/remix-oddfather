@@ -1,3 +1,3 @@
-import MoneylineTable from "./MoneylineTable";
+import MoneylineTable from './MoneylineTable';
 
 export default MoneylineTable;

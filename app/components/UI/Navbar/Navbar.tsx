@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { Link, LoaderFunction, useFetcher, useLoaderData } from "remix";
-import type { LinksFunction } from "remix";
-import styles from "./styles.css";
-import { FiMenu, FiX } from "react-icons/fi";
+import { useEffect, useState } from 'react';
+import { Link, LoaderFunction, useFetcher, useLoaderData } from 'remix';
+import type { LinksFunction } from 'remix';
+import styles from './styles.css';
+import { FiMenu, FiX } from 'react-icons/fi';
 
-export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
 
 const Navbar = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -12,32 +12,32 @@ const Navbar = () => {
   const closeMobileMenu = () => setOpen(false);
 
   return (
-    <div className="navbar">
-      <Link className="nav-logo" to="/">
+    <div className='navbar'>
+      <Link className='nav-logo' to='/'>
         OF
       </Link>
-      <div className="nav-icon" onClick={handleClick}>
+      <div className='nav-icon' onClick={handleClick}>
         {open ? <FiX /> : <FiMenu />}
       </div>
-      <ul className={open ? "nav-links active" : "nav-links"}>
-        <li className="nav-item" onClick={closeMobileMenu}>
-          <Link to="/" className="nav-link">
+      <ul className={open ? 'nav-links active' : 'nav-links'}>
+        <li className='nav-item' onClick={closeMobileMenu}>
+          <Link to='/' className='nav-link'>
             Home
           </Link>
         </li>
-        <li className="nav-item" onClick={closeMobileMenu}>
-          <Link to="/profile" className="nav-link">
+        <li className='nav-item' onClick={closeMobileMenu}>
+          <Link to='/profile' className='nav-link'>
             Profile
           </Link>
         </li>
-        <li className="nav-item" onClick={closeMobileMenu}>
-          <Link to="/login" className="nav-link">
+        <li className='nav-item' onClick={closeMobileMenu}>
+          <Link to='/login' className='nav-link'>
             Login
           </Link>
         </li>
-        <li className="nav-item" onClick={closeMobileMenu}>
-          <Link to="/register" className="nav-link">
-            Sign Up
+        <li className='nav-item' onClick={closeMobileMenu}>
+          <Link to='/logout' className='nav-link'>
+            Log Out
           </Link>
         </li>
       </ul>

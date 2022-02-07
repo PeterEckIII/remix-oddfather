@@ -1,6 +1,6 @@
-import { useMemo } from "react";
-import { Column, useTable } from "react-table";
-import Table from "../Table";
+import { useMemo } from 'react';
+import { Column, useTable } from 'react-table';
+import Table from '../Table';
 
 type OverUnderDataProps = {
   totalOpen: number;
@@ -28,16 +28,16 @@ const OverUnderTable = ({ overUnderData, tableName }: OverUnderTableProps) => {
   const columns: Column[] = useMemo(
     () => [
       {
-        Header: "Open",
-        accessor: "open",
+        Header: 'Open',
+        accessor: 'open',
       },
       {
-        Header: "",
-        accessor: "valueName",
+        Header: '',
+        accessor: 'valueName',
       },
       {
-        Header: "Close",
-        accessor: "close",
+        Header: 'Close',
+        accessor: 'close',
       },
     ],
     []
@@ -45,19 +45,19 @@ const OverUnderTable = ({ overUnderData, tableName }: OverUnderTableProps) => {
   const data: any[] = useMemo(
     () => [
       {
-        open: totalOpen || "-",
-        valueName: "Over/Under",
-        close: totalClose || "-",
+        open: totalOpen || '-',
+        valueName: 'Over/Under',
+        close: totalClose || '-',
       },
       {
-        open: overPayoutOpen || "-",
-        valueName: "Over Payout",
-        close: overPayoutClose || "-",
+        open: overPayoutOpen || '-',
+        valueName: 'Over Payout',
+        close: overPayoutClose || '-',
       },
       {
-        open: underPayoutOpen || "-",
-        valueName: "Under Payout",
-        close: underPayoutClose || "-",
+        open: underPayoutOpen || '-',
+        valueName: 'Under Payout',
+        close: underPayoutClose || '-',
       },
     ],
     [
@@ -79,7 +79,7 @@ const OverUnderTable = ({ overUnderData, tableName }: OverUnderTableProps) => {
       headerGroups={table.headerGroups}
       rows={table.rows}
       prepareRow={table.prepareRow}
-      tableName="Over Under"
+      tableName='Over Under'
     />
   );
 };

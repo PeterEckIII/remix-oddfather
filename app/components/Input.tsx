@@ -1,5 +1,5 @@
-import ValidationMessage from "./ValidationMessage";
-import React from "react";
+import ValidationMessage from './ValidationMessage';
+import React from 'react';
 
 type InputProps = {
   id: string;
@@ -27,10 +27,10 @@ export default function Input({
   ...props
 }: InputProps & React.HTMLProps<HTMLInputElement>) {
   return (
-    <div className="input-container">
+    <div className='input-container'>
       <label htmlFor={htmlFor}>{labelText}</label>
       <input
-        type={type || "submit"}
+        type={type || 'submit'}
         id={id}
         name={htmlFor}
         defaultValue={defaultValue}

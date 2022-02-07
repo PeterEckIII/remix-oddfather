@@ -4,9 +4,9 @@ type TeamProps = {
 };
 
 const Team = ({ logo, shortname }: TeamProps) => (
-  <div className="team-container">
+  <div className='team-container'>
     <div>Logo</div>
-    <div className="name-container">
+    <div className='name-container'>
       <p>{shortname}</p>
     </div>
   </div>

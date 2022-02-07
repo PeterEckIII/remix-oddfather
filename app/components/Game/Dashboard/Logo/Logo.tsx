@@ -8,8 +8,8 @@ type LogoProps = {
 const Logo = ({ logo, shortname }: LogoProps) => (
   <div>
     <img
-      height="50px"
-      width="50px"
+      height='50px'
+      width='50px'
       src={`${baseUrl}${logo}`}
       alt={`${shortname} logo`}
     />

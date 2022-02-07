@@ -1,6 +1,6 @@
-import bcrypt from "bcryptjs";
-import { createCookieSessionStorage, redirect } from "remix";
-import { db } from "./db.server";
+import bcrypt from 'bcryptjs';
+import { createCookieSessionStorage, redirect } from 'remix';
+import { db } from './db.server';
 
 const sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret) {
@@ -9,24 +9,24 @@ if (!sessionSecret) {
 
 const storage = createCookieSessionStorage({
   cookie: {
-    name: "OF_session",
-    secure: process.env.NODE_ENV === "production",
+    name: 'OF_session',
+    secure: process.env.NODE_ENV === 'production',
     secrets: [sessionSecret],
-    sameSite: "lax",
-    path: "/",
+    sameSite: 'lax',
+    path: '/',
     maxAge: 60 * 60 * 24 * 30,
     httpOnly: true,
   },
 });
 
 export function getUserSession(request: Request) {
-  return storage.getSession(request.headers.get("Cookie")) || undefined;
+  return storage.getSession(request.headers.get('Cookie')) || undefined;
 }
 
 export async function getUserId(request: Request) {
   const session = await getUserSession(request);
-  const userId = session.get("userId");
-  if (!userId || typeof userId !== "string") return null;
+  const userId = session.get('userId');
+  if (!userId || typeof userId !== 'string') return null;
   return userId;
 }
 
@@ -35,9 +35,9 @@ export async function requireUserId(
   redirectTo: string = new URL(request.url).pathname
 ) {
   const session = await getUserSession(request);
-  const userId = session.get("userId");
-  if (!userId || typeof userId !== "string") {
-    const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
+  const userId = session.get('userId');
+  if (!userId || typeof userId !== 'string') {
+    const searchParams = new URLSearchParams([['redirectTo', redirectTo]]);
     throw redirect(`/login?${searchParams}`);
   }
   return userId;
@@ -45,7 +45,7 @@ export async function requireUserId(
 
 export async function getUser(request: Request) {
   const userId = await getUserId(request);
-  if (typeof userId !== "string") return null;
+  if (typeof userId !== 'string') return null;
 
   try {
     const user = await db.user.findUnique({ where: { id: userId } });
@@ -56,20 +56,20 @@ export async function getUser(request: Request) {
 }
 
 export async function logout(request: Request) {
-  const session = await storage.getSession(request.headers.get("Cookie"));
-  return redirect("/login", {
+  const session = await storage.getSession(request.headers.get('Cookie'));
+  return redirect('/login', {
     headers: {
-      "Set-Cookie": await storage.destroySession(session),
+      'Set-Cookie': await storage.destroySession(session),
     },
   });
 }
 
 export async function createUserSession(userId: string, redirectTo: string) {
   const session = await storage.getSession();
-  session.set("userId", userId);
+  session.set('userId', userId);
   return redirect(redirectTo, {
     headers: {
-      "Set-Cookie": await storage.commitSession(session),
+      'Set-Cookie': await storage.commitSession(session),
     },
   });
 }

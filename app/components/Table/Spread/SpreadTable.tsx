@@ -1,6 +1,6 @@
-import { useMemo } from "react";
-import { Column, useTable } from "react-table";
-import Table from "../Table";
+import { useMemo } from 'react';
+import { Column, useTable } from 'react-table';
+import Table from '../Table';
 
 type TeamInfoProps = {
   homeTeamName: string;
@@ -42,29 +42,29 @@ const SpreadTable = ({ teamInfo, spreadData, tableName }: SpreadTableProps) => {
         Header: `${homeTeamName}`,
         columns: [
           {
-            Header: "Open",
-            accessor: "homeOpen",
+            Header: 'Open',
+            accessor: 'homeOpen',
           },
           {
-            Header: "Close",
-            accessor: "homeClose",
+            Header: 'Close',
+            accessor: 'homeClose',
           },
         ],
       },
       {
-        Header: "",
-        accessor: "valueName",
+        Header: '',
+        accessor: 'valueName',
       },
       {
         Header: `${awayTeamName}`,
         columns: [
           {
-            Header: "Open",
-            accessor: "awayOpen",
+            Header: 'Open',
+            accessor: 'awayOpen',
           },
           {
-            Header: "Close",
-            accessor: "awayClose",
+            Header: 'Close',
+            accessor: 'awayClose',
           },
         ],
       },
@@ -74,18 +74,18 @@ const SpreadTable = ({ teamInfo, spreadData, tableName }: SpreadTableProps) => {
   const data: any[] = useMemo(
     () => [
       {
-        homeOpen: homeOpen || "-",
-        homeClose: homeClose || "-",
-        valueName: "Runline",
-        awayOpen: awayOpen || "-",
-        awayClose: awayClose || "-",
+        homeOpen: homeOpen || '-',
+        homeClose: homeClose || '-',
+        valueName: 'Runline',
+        awayOpen: awayOpen || '-',
+        awayClose: awayClose || '-',
       },
       {
-        homeOpen: homeOpenPayout || "-",
-        homeClose: homeClosePayout || "-",
-        valueName: "Runline Payout",
-        awayOpen: awayOpenPayout || "-",
-        awayClose: awayClosePayout || "-",
+        homeOpen: homeOpenPayout || '-',
+        homeClose: homeClosePayout || '-',
+        valueName: 'Runline Payout',
+        awayOpen: awayOpenPayout || '-',
+        awayClose: awayClosePayout || '-',
       },
     ],
     [
@@ -109,7 +109,7 @@ const SpreadTable = ({ teamInfo, spreadData, tableName }: SpreadTableProps) => {
       headerGroups={table.headerGroups}
       rows={table.rows}
       prepareRow={table.prepareRow}
-      tableName="Spread"
+      tableName='Spread'
     />
   );
 };

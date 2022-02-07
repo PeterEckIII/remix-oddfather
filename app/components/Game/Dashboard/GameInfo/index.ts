@@ -1,3 +1,3 @@
-import GameInfo from "./GameInfo";
+import GameInfo from './GameInfo';
 
 export default GameInfo;

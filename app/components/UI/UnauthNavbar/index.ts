@@ -1,3 +1,3 @@
-import UnauthNavbar from "./UnauthNavbar";
+import UnauthNavbar from './UnauthNavbar';
 
 export default UnauthNavbar;

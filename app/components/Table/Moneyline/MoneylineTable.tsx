@@ -1,6 +1,6 @@
-import { useMemo } from "react";
-import { Column, useTable } from "react-table";
-import Table from "../Table";
+import { useMemo } from 'react';
+import { Column, useTable } from 'react-table';
+import Table from '../Table';
 
 type MoneylineTableProps = {
   homeOpen: number;
@@ -25,29 +25,29 @@ const MoneylineTable = ({
         Header: `${homeTeamName}`,
         columns: [
           {
-            Header: "Open",
-            accessor: "homeOpen",
+            Header: 'Open',
+            accessor: 'homeOpen',
           },
           {
-            Header: "Close",
-            accessor: "homeClose",
+            Header: 'Close',
+            accessor: 'homeClose',
           },
         ],
       },
       {
-        Header: "",
-        accessor: "valueName",
+        Header: '',
+        accessor: 'valueName',
       },
       {
         Header: `${awayTeamName}`,
         columns: [
           {
-            Header: "Open",
-            accessor: "awayOpen",
+            Header: 'Open',
+            accessor: 'awayOpen',
           },
           {
-            Header: "Close",
-            accessor: "awayClose",
+            Header: 'Close',
+            accessor: 'awayClose',
           },
         ],
       },
@@ -57,11 +57,11 @@ const MoneylineTable = ({
   const data: any[] = useMemo(
     () => [
       {
-        homeOpen: homeOpen || "-",
-        homeClose: homeClose || "-",
-        valueName: "Moneyline",
-        awayOpen: awayOpen || "-",
-        awayClose: awayClose || "-",
+        homeOpen: homeOpen || '-',
+        homeClose: homeClose || '-',
+        valueName: 'Moneyline',
+        awayOpen: awayOpen || '-',
+        awayClose: awayClose || '-',
       },
     ],
     [homeTeamName, awayTeamName]
@@ -75,7 +75,7 @@ const MoneylineTable = ({
       headerGroups={table.headerGroups}
       rows={table.rows}
       prepareRow={table.prepareRow}
-      tableName="Moneyline"
+      tableName='Moneyline'
     />
   );
 };

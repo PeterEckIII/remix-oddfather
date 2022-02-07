@@ -1,7 +1,7 @@
-import { Outlet, Link, useLoaderData, useCatch } from "remix";
-import type { LoaderFunction } from "remix";
-import { Team } from "@prisma/client";
-import { db } from "~/utils/db.server";
+import { Outlet, Link, useLoaderData, useCatch } from 'remix';
+import type { LoaderFunction } from 'remix';
+import { Team } from '@prisma/client';
+import { db } from '~/utils/db.server';
 
 type LoaderData = { teams: Array<Team> };
 
@@ -30,7 +30,7 @@ export default function TeamsRoute() {
               return (
                 <li key={team.id}>
                   {team.name}
-                  <Link prefetch="intent" to={team.id}>
+                  <Link prefetch='intent' to={team.id}>
                     {team.shortname}
                   </Link>
                 </li>
@@ -38,7 +38,7 @@ export default function TeamsRoute() {
             })}
           </ul>
         </div>
-        <div className="teams-outlet">
+        <div className='teams-outlet'>
           <Outlet />
         </div>
       </main>
@@ -49,7 +49,7 @@ export default function TeamsRoute() {
 export function CatchBoundary() {
   const caught = useCatch();
   if (caught.status === 404) {
-    return <div className="error-container">There are no teams to display</div>;
+    return <div className='error-container'>There are no teams to display</div>;
   }
   throw new Error(`Unexpected caught response with status: ${caught.status}`);
 }
@@ -57,7 +57,7 @@ export function CatchBoundary() {
 export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error);
   return (
-    <div className="error-container">
+    <div className='error-container'>
       There was an error loading teams from the server. Please go back to the
       last page and try again
     </div>

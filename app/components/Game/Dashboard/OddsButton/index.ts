@@ -1,3 +1,3 @@
-import OddsButton from "./OddsButton";
+import OddsButton from './OddsButton';
 
 export default OddsButton;

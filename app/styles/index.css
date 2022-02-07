@@ -1,9 +1,36 @@
-body {
-  color: hsl(0, 0%, 100%);
-  background-image: radial-gradient(
-    circle,
-    rgba(152, 11, 238, 1) 0%,
-    rgba(118, 15, 181, 1) 35%,
-    rgba(58, 13, 85, 1) 100%
-  );
+.home-container {
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  width: 50%;
+  margin: 0 auto;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
+    rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+}
+
+.home-heading {
+  margin: 2rem;
+  text-align: center;
+  size: 3rem;
+}
+
+.home-subheading {
+  margin: 1rem;
+  text-align: center;
+  size: 2rem;
+}
+
+.home-content {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 15px 10px;
+  padding: 15px 10px;
+}
+
+.home-button-link {
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: white;
+  background-color: hsla(239, 21%, 20%, 1);
 }

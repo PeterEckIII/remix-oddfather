@@ -1,5 +1,5 @@
-import { Game } from "~/types";
-import GameCard from "../GameCard";
+import { Game } from '~/types';
+import GameCard from '../GameCard';
 
 type GameContainerProps = {
   games: Game[];
@@ -7,11 +7,11 @@ type GameContainerProps = {
 };
 
 const GameContainer = ({ games, sport }: GameContainerProps) => (
-  <div className="game-container">
+  <div className='game-container'>
     <h4>{sport}</h4>
-    <div className="game-content">
+    <div className='game-content'>
       {games &&
-        games.map((game) => (
+        games.map(game => (
           <GameCard key={`${game.boxscoreIndex}`} game={game} />
         ))}
     </div>

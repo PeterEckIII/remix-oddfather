@@ -1,7 +1,7 @@
-import { Team } from "@prisma/client";
-import type { LoaderFunction, MetaFunction } from "remix";
-import { Link, useLoaderData, useParams, useCatch } from "remix";
-import { db } from "~/utils/db.server";
+import { Team } from '@prisma/client';
+import type { LoaderFunction, MetaFunction } from 'remix';
+import { Link, useLoaderData, useParams, useCatch } from 'remix';
+import { db } from '~/utils/db.server';
 
 export const meta: MetaFunction = ({
   data,
@@ -10,8 +10,8 @@ export const meta: MetaFunction = ({
 }) => {
   if (!data) {
     return {
-      title: "No team",
-      description: "No team found",
+      title: 'No team',
+      description: 'No team found',
     };
   }
   return {
@@ -41,7 +41,7 @@ export default function GameRoute() {
         {data.team.city}, {data.team.state}
       </p>
       <p>Stadium: {data.team.stadium}</p>
-      <Link to=".">{data.team.name}</Link>
+      <Link to='.'>{data.team.name}</Link>
     </div>
   );
 }
@@ -51,7 +51,7 @@ export function CatchBoundary() {
   const params = useParams();
   if (caught.status === 404) {
     return (
-      <div className="error-container">
+      <div className='error-container'>
         There is no team with id {params.teamId}
       </div>
     );
@@ -63,6 +63,6 @@ export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error);
   const { teamId } = useParams();
   return (
-    <div className="error-container">{`There was an error loading team with id ${teamId}`}</div>
+    <div className='error-container'>{`There was an error loading team with id ${teamId}`}</div>
   );
 }

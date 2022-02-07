@@ -11,14 +11,14 @@ export default function Button({
   ...props
 }: ButtonProps) {
   return (
-    <div className="button-container">
+    <div className='button-container'>
       <button
-        className="button"
-        type="submit"
-        disabled={transitionState === "submitting"}
+        className='button'
+        type='submit'
+        disabled={transitionState === 'submitting'}
         {...props}
       >
-        {transitionState === "submitting" ? loadingText : callToAction}
+        {transitionState === 'submitting' ? loadingText : callToAction}
       </button>
     </div>
   );

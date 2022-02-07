@@ -16,8 +16,7 @@ import { ReactNode } from "react";
 
 import Navbar from "~/components/UI/Navbar";
 import UnauthNavbar from "./components/UI/UnauthNavbar";
-import { CognitoUser } from "amazon-cognito-identity-js";
-import { getUser, getUserSession } from "./utils/cognito.server";
+import { getUserSession } from "./utils/cognito.server";
 
 export const links: LinksFunction = () => {
   return [

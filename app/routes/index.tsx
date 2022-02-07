@@ -2,25 +2,37 @@ import {
   LinksFunction,
   LoaderFunction,
   MetaFunction,
+  redirect,
   useLoaderData,
+  json,
 } from "remix";
 import stylesUrl from "~/styles/index.css";
 import { client } from "~/utils/api.server";
 import { gql } from "@apollo/client";
 import { todaysGames } from "~/utils/queries";
+import { getUserSession } from "~/utils/cognito.server";
+import GameDay from "~/components/Game/Dashboard/GameDay";
 
-// export const loader: LoaderFunction = async () => {
-//   const TODAYS_GAMES = gql`
-//     ${todaysGames}
-//   `;
-//   const results = await client.query({
-//     query: TODAYS_GAMES,
-//     variables: {
-//       limit: 10,
-//     },
-//   });
-//   return results;
-// };
+export const loader: LoaderFunction = async ({ request }) => {
+  let res;
+  const authenticated = await getUserSession(request);
+  authenticated.data.userId
+    ? async () => {
+        const TODAYS_GAMES = gql`
+          ${todaysGames}
+        `;
+        const results = await client.query({
+          query: TODAYS_GAMES,
+          variables: {
+            gameDate: "2021-09-15",
+          },
+        });
+        res = results;
+      }
+    : (res = null);
+  redirect("/login");
+  return res;
+};
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
@@ -35,13 +47,12 @@ export const meta: MetaFunction = () => {
 };
 
 export default function IndexRoute() {
-  // const results = useLoaderData();
-  // console.log(`Results: ${JSON.stringify(results, null, 2)}`);
-
+  const results = useLoaderData();
+  const date = new Date(1631664001000);
+  console.log(`Results: ${JSON.stringify(results)}`);
   return (
     <div>
-      <p>Results in console</p>
-      <div></div>
+      <GameDay games={results?.data?.todaysGames} containerDate={date} />
     </div>
   );
 }

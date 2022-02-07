@@ -2,7 +2,7 @@ import styles from "./styles.css";
 import { LinksFunction } from "remix";
 
 import Teams from "../Teams";
-import Scores from "../Scores";
+// import Scores from "../Scores";
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
@@ -26,9 +26,7 @@ const TeamInfo = ({
       </div>
     </div>
     <div className="scores-container">
-      <div>
-        <Scores homeScore={homeScore} awayScore={awayScore} />
-      </div>
+      <div>{/* <Scores homeScore={homeScore} awayScore={awayScore} /> */}</div>
     </div>
   </div>
 );

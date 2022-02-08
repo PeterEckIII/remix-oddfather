@@ -4,14 +4,11 @@ type LocationProps = {
   state: string;
 };
 
-const Location = ({ venue, city, state }: LocationProps) => {
-  const displayString = `${venue}, ${city}, ${state}`;
-
-  return (
-    <div className='location-container'>
-      <p className='location-text'>{displayString}</p>
-    </div>
-  );
-};
+const Location = ({ venue, city, state }: LocationProps) => (
+  <div className='location-container'>
+    <p className='location-text'>{venue}</p>
+    <p className='location-text'>{`${city}, ${state}`}</p>
+  </div>
+);
 
 export default Location;

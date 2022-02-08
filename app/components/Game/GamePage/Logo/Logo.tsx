@@ -1,6 +1,5 @@
 type LogoProps = {
   logo: string;
-  id: string;
   shortname: string;
 };
 

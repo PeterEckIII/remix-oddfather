@@ -42,7 +42,8 @@ export const meta: MetaFunction = () => {
 
 export default function DashboardRoute() {
   const games = useLoaderData();
-  const date = formatDateForGameContainer(new Date(1631664001000));
+  const newDate = new Date(1631664001000);
+  const date = formatDateForGameContainer(newDate);
   return (
     <div>
       <GameDay games={games} containerDate={date} />

@@ -1,0 +1,114 @@
+.game-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: var(--main-box-shadow);
+  margin: auto 0;
+  width: 85%;
+}
+
+.game-page-heading {
+  margin: 0.5rem;
+  text-align: center;
+}
+
+.competitor-display {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.25rem;
+  margin-bottom: -1rem;
+}
+
+.odds-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  width: 85%;
+}
+
+.location-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--main-bg-color);
+  font-weight: 500;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-content {
+  width: 200px;
+  margin: 1.75rem 0;
+  margin-top: 1.7rem;
+}
+
+.score-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.score-content {
+  padding: 1rem 0;
+  font-size: 3rem;
+}
+
+.time-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--main-bg-color);
+  font-weight: 700;
+}
+
+/* REALLY small screens (595px and below) */
+@media only screen and (max-width: 595px) {
+  .game-page-container {
+    width: 95%;
+  }
+
+  .odds-container {
+    width: 100%;
+  }
+
+  .logo-content {
+    width: 125px;
+    margin: 2rem 0;
+  }
+}
+
+/*  Small screen devices */
+@media only screen and (max-width: 600px) {
+  .logo-content {
+    width: 140px;
+    margin: 2.25rem 0;
+  }
+  .odds-container {
+    width: 100%;
+  }
+}
+
+/* Medium screen devices */
+@media only screen and (max-width: 768px) {
+  .logo-content {
+    width: 150px;
+    margin: 2.5rem;
+  }
+  .odds-container {
+    width: 100%;
+  }
+}
+
+/* Big screen devices */
+@media only screen and (max-width: 889px) {
+}
+
+@media only screen and (max-width: 1200px) {
+}

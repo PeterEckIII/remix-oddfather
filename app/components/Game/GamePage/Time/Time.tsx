@@ -1,12 +1,15 @@
+import { formatDateForGamePage } from '~/utils/dates';
+
 type TimeProps = {
   datetimeEpoch: number;
 };
 
 const Time = ({ datetimeEpoch }: TimeProps) => {
-  // get formatted date and time using datetimeEpoch
+  const newDate = new Date(datetimeEpoch);
+  const time = formatDateForGamePage(newDate);
   return (
     <div className='time-container'>
-      <p>{datetimeEpoch}</p>
+      <p>{time}</p>
     </div>
   );
 };

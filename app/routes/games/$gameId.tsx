@@ -1,7 +1,13 @@
-import type { LoaderFunction, MetaFunction } from 'remix';
-import { Link, useLoaderData, useCatch, useParams } from 'remix';
-import type { Game } from '@prisma/client';
-import { db } from '~/utils/db.server';
+import { gql } from '@apollo/client';
+import { LoaderFunction, MetaFunction, LinksFunction } from 'remix';
+import { Link, useLoaderData, useCatch, useParams, redirect } from 'remix';
+import GamePageDisplay from '~/components/Game/GamePage/GamePageDisplay';
+import type { Game } from '~/types';
+import { client } from '~/utils/api.server';
+import { getUserSession } from '~/utils/cognito.server';
+import { getGame } from '~/utils/queries';
+import stylesUrl from '~/styles/game.css';
+import { sportSwap } from '~/utils/sportSwap';
 
 export const meta: MetaFunction = ({
   data,
@@ -15,37 +21,45 @@ export const meta: MetaFunction = ({
     };
   }
   return {
-    title: `"${data.game.sport} - ${data.game.boxscoreIndex}"`,
-    description: `${data.game.venue} @ ${new Date(data.game.datetimeEpoch)}`,
+    title: `OF | ${(sportSwap as any)[data.sport]} | ${
+      data.homeTeam.shortname
+    }/${data.awayTeam.shortname}`,
+    description: `${data.venue} @ ${new Date(data.datetimeEpoch)}`,
   };
 };
 
-type LoaderData = {
-  game: Game;
-};
+export const links: LinksFunction = () => [
+  { rel: 'stylesheet', href: stylesUrl },
+];
 
-export const loader: LoaderFunction = async ({ params }) => {
-  const game = await db.game.findUnique({
-    where: { id: params.gameId },
+interface LoaderData extends Game {
+  game: Game;
+}
+
+export const loader: LoaderFunction = async ({ request, params }) => {
+  const authenticated = await getUserSession(request);
+  if (!authenticated.data.userId) return redirect('/login');
+  const id = params.gameId;
+  const GET_GAME = gql`
+    ${getGame}
+  `;
+
+  const results = await client.query({
+    query: GET_GAME,
+    variables: {
+      id,
+    },
   });
-  if (!game) {
-    throw new Response(`This game could not be found`, {
-      status: 404,
-    });
-  }
-  const data: LoaderData = { game };
-  return data;
+  if (!results) throw new Error(`No results for game ID: ${id}`);
+  return results.data.getGame;
 };
 
 export default function GameRoute() {
-  const data = useLoaderData<LoaderData>();
+  const game = useLoaderData<LoaderData>();
+  console.log(`Odds: ${JSON.stringify(game.odds, null, 2)}`);
   return (
-    <div>
-      <p>{data.game.venue}</p>
-      <p>
-        {data.game.homeScore} - {data.game.awayScore}
-      </p>
-      <Link to='.'>{data.game.boxscoreIndex}</Link>
+    <div className='gamepage-container'>
+      <GamePageDisplay game={game} />
     </div>
   );
 }

@@ -5,7 +5,8 @@ type TimeProps = {
 };
 
 const Time = ({ datetimeEpoch }: TimeProps) => {
-  const date = formatDateForGameCard(datetimeEpoch);
+  const newDate = new Date(datetimeEpoch);
+  const date = formatDateForGameCard(newDate);
   return (
     <div className='time-container'>
       <p className='gametime'>{date}</p>

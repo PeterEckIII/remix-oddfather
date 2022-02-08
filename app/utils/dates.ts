@@ -76,7 +76,7 @@ const formatDateForGameContainer = (d: Date | string) => {
   return formattedDate;
 };
 
-const formatDateForGameCard = (d: Date | string | number) => {
+const formatDateForGameCard = (d: Date | string) => {
   const month = getMonthShorthand(d);
   const gameDate = getDate(d);
   const time = trimTime(d);

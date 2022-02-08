@@ -70,9 +70,10 @@ input {
   margin: 0.5rem;
   margin-top: 0.9rem;
   border-radius: 0.3rem;
-  background-color: #b86cde;
+  background-color: var(--main-bg-color);
   color: white;
   padding: 0.2rem;
+  cursor: pointer;
 }
 
 .links a:hover {

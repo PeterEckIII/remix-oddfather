@@ -5,7 +5,7 @@ import {
   redirect,
   useLoaderData,
 } from 'remix';
-import stylesUrl from '~/styles/index.css';
+import stylesUrl from '~/styles/dashboard.css';
 import { client } from '~/utils/api.server';
 import { gql } from '@apollo/client';
 import { todaysGames } from '~/utils/queries';
@@ -43,7 +43,6 @@ export const meta: MetaFunction = () => {
 export default function DashboardRoute() {
   const games = useLoaderData();
   const date = formatDateForGameContainer(new Date(1631664001000));
-  console.log(`Results: ${JSON.stringify(games)}`);
   return (
     <div>
       <GameDay games={games} containerDate={date} />

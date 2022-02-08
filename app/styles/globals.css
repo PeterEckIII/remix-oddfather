@@ -1,3 +1,24 @@
+:root {
+  --main-bg-color: hsla(239, 21%, 20%, 1);
+  --gray-50: #F7FAFC;
+  --gray-100: #EDF2F7;
+  --gray-200: #E2E8F0;
+  --gray-300: #CBD5E0;
+  --gray-400: #A0AEC0;
+  --gray-500: #718096;
+  --gray-600: #4A5568;
+  --gray-700: #2D3748;
+  --gray-800: #1A202C;
+  --gray-900: #171923;
+  --main-box-shadow: box-shadow: rgba(0, 0, 0, 0.4) 0px 20px 25px -5px,
+    rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+  --secondary-box-shadow: box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.5);
+  --tooltip-text-color: white;
+  --tooltip-bg-color: hsla(239, 21%, 20%, 1);
+  --tooltip-margin: 30px;
+  --tooltip-arrow-size: 6px;
+}
+
 html,
 body {
   padding: 0;
@@ -18,78 +39,98 @@ a {
   z-index: 1000;
 }
 
-.navbar {
-  height: 80px;
-  width: 100%;
-  background: hsla(239, 21%, 20%, 1);
-  color: white;
+.tooltip-wrapper {
+  display: inline-block;
+  position: relative;
+}
+
+.tooltip-tip {
+  position: absolute;
+  border-radius: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px;
+  color: var(--tooltip-text-color);
+  background: var(--tooltip-bg-color);
+  font-size: 0.7rem;
+  line-height: 1;
+  z-index: 100;
+  white-space: nowrap;
+}
+
+.tooltip-tip::before {
+  content: " ";
+  left: 50%;
+  border: solid transparent;
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-width: var(--tooltip-arrow-size);
+  margin-left: calc(var(--tooltip-arrow-size) * -1);
+}
+
+.tooltip-tip.top {
+  top: calc(var(--tooltip-margin) * -1);
+}
+
+.tooltip-tip.top::before {
+  top: 100%;
+  border-top-color: var(--tooltip-bg-color);
+}
+
+.tooltip-tip.right {
+  left: calc(100% + var(--tooltip-margin));
+  top: 50%;
+  transform: translateX(0) translateY(-50%);
+}
+
+.tooltip-tip.right::before {
+  left: calc(var(--tooltip-arrow-size) * -1);
+  top: 50%;
+  transform: translateX(0) translateY(-50%);
+  border-right-color: var(--tooltip-bg-color);
+}
+
+.tooltip-tip.bottom {
+  bottom: calc(var(--tooltip-margin) * -1);
+}
+
+.tooltip-tip.bottom::before {
+  bottom: 100%;
+  border-bottom-color: var(--tooltip-bg-color);
+}
+
+.tooltip-tip.left {
+  left: auto;
+  right: calc(100% + var(--tooltip-margin));
+  top: 50%;
+  transform: translateX(0) translateY(-50%);
+}
+
+.tooltip-tip.left::before {
+  left: auto;
+  right: calc(var(--tooltip-arrow-size) * -2);
+  top: 50%;
+  transform: translateX(0) translateY(-50%);
+  border-left-color: var(--tooltip-bg-color);
+}
+
+.odds-button-container {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding: 0 2rem;
-  font-size: 1rem;
-}
-
-.nav-logo {
-  text-decoration: none;
-  color: white;
-}
-
-.nav-links {
-  display: grid;
-  grid-template-columns: repeat(4, auto);
-  grid-gap: 20px;
-  list-style: none;
-}
-
-.nav-link {
-  text-decoration: none;
-  color: white;
-  transition: 0.3s all;
-}
-
-.nav-link:hover {
-  color: hsla(239, 21%, 65%, 1);
-}
-
-.nav-icon {
-  display: none;
-  font-size: 2rem;
   cursor: pointer;
+  width: 10%;
 }
 
-@media only screen and (max-width: 640px) {
-  .navbar {
-    position: relative;
-  }
+.odds-button-content {
+  align-self: flex-end;
+  margin-right: 1.5rem;
+  border-left-color: 0.5px solid gray;
+}
 
-  .nav-links {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 80px;
-    right: -100%;
-    text-align: center;
-    width: 100%;
-    transition: 0.5s all;
-  }
-
-  .nav-links.active {
-    background: hsla(239, 21%, 20%, 1);
-    right: 0;
-  }
-
-  .nav-item {
-    padding: 10px 0;
-    border-radius: 10px;
-    width: 100%;
-  }
-
-  .nav-item:hover {
-    background: hsla(239, 21%, 65%, 1);
-  }
-
-  .nav-icon {
-    display: flex;
-  }
+.odds-button-content:hover {
+  background-color: #CBD5E0;
 }

@@ -1,10 +1,8 @@
 import type { ActionFunction, LinksFunction, MetaFunction } from 'remix';
 import {
-  Link,
   useActionData,
   json,
   useSearchParams,
-  redirect,
   Form,
   useTransition,
 } from 'remix';
@@ -83,7 +81,7 @@ export const action: ActionFunction = async ({ request }) => {
   const cookie = await request.headers.get('Cookie');
   console.log(`Cookie from LOGIN PAGE: ${cookie}`);
   const userId = await user.getIdToken().getJwtToken();
-  return await createUserSession(userId, '/');
+  return await createUserSession(userId, '/dashboard');
 };
 
 export default function Login() {

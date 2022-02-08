@@ -1,6 +1,9 @@
 import { useState } from 'react';
-import { Link } from 'remix';
+import { Link, LinksFunction } from 'remix';
 import { FiMenu, FiX } from 'react-icons/fi';
+import styles from './styles.css';
+
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
 
 const UnauthNavbar = () => {
   const [open, setOpen] = useState<boolean>(false);

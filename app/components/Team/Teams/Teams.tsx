@@ -1,3 +1,4 @@
+import { teams } from '~/utils/returnTeamLogo';
 import Team from '../Team';
 
 type TeamsProps = {
@@ -6,15 +7,16 @@ type TeamsProps = {
 };
 
 const Teams = ({ homeShortname, awayShortname }: TeamsProps) => {
-  // get logos
+  const homeLogo = (teams as any)[homeShortname];
+  const awayLogo = (teams as any)[awayShortname];
 
   return (
     <div className='teams-container'>
       <div className='home-team-container'>
-        <Team logo='' shortname={homeShortname} />
+        <Team logo={homeLogo} shortname={homeShortname} />
       </div>
       <div className='away-team-container'>
-        <Team logo='' shortname={awayShortname} />
+        <Team logo={awayLogo} shortname={awayShortname} />
       </div>
     </div>
   );

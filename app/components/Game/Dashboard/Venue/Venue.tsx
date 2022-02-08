@@ -1,7 +1,5 @@
 type VenueProps = {
   venue: string;
-  city?: string;
-  state?: string;
 };
 
 const Venue = ({ venue }: VenueProps) => (

@@ -15,7 +15,9 @@ import globalLargeStylesUrl from '~/styles/globals-large.css';
 import { ReactNode } from 'react';
 
 import Navbar from '~/components/UI/Navbar';
+import { links as navbarLinks } from '~/components/UI/Navbar/Navbar';
 import UnauthNavbar from './components/UI/UnauthNavbar';
+import { links as unauthNavbarLinks } from '~/components/UI/UnauthNavbar/UnauthNavbar';
 import { getUserSession } from './utils/cognito.server';
 
 export const links: LinksFunction = () => {
@@ -49,6 +51,8 @@ export const links: LinksFunction = () => {
       rel: 'stylesheet',
       href: 'https://unpkg.com/modern-css-reset@1.4.0/dist/reset.min.css',
     },
+    ...navbarLinks(),
+    ...unauthNavbarLinks(),
   ];
 };
 

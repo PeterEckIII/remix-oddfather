@@ -2,7 +2,7 @@ import styles from './styles.css';
 import { LinksFunction } from 'remix';
 
 import Teams from '../Teams';
-// import Scores from "../Scores";
+import Scores from '../../Game/Dashboard/Scores';
 
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
 
@@ -20,13 +20,13 @@ const TeamInfo = ({
   awayScore,
 }: TeamInfoProps) => (
   <div className='team-info-container'>
-    <div className='teams-container'>
+    <div className='team-info-content'>
       <div>
         <Teams homeShortname={homeShortname} awayShortname={awayShortname} />
       </div>
-    </div>
-    <div className='scores-container'>
-      <div>{/* <Scores homeScore={homeScore} awayScore={awayScore} /> */}</div>
+      <div className='score-container'>
+        <Scores homeScore={homeScore || '-'} awayScore={awayScore || '-'} />
+      </div>
     </div>
   </div>
 );

@@ -1,3 +1,5 @@
+import Logo from '~/components/Game/Dashboard/Logo';
+
 type TeamProps = {
   logo: string;
   shortname: string;
@@ -5,7 +7,7 @@ type TeamProps = {
 
 const Team = ({ logo, shortname }: TeamProps) => (
   <div className='team-container'>
-    <div>Logo</div>
+    <Logo shortname={shortname} logo={logo} />
     <div className='name-container'>
       <p>{shortname}</p>
     </div>

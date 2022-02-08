@@ -1,13 +1,14 @@
+import { formatDateForGameCard } from '~/utils/dates';
+
 type TimeProps = {
   datetimeEpoch: number;
 };
 
 const Time = ({ datetimeEpoch }: TimeProps) => {
-  // get formatted date for game card
-  // formatDateForGameCard(datetimeEpoch)
+  const date = formatDateForGameCard(datetimeEpoch);
   return (
-    <div>
-      <p className='gametime'>{datetimeEpoch}</p>
+    <div className='time-container'>
+      <p className='gametime'>{date}</p>
     </div>
   );
 };

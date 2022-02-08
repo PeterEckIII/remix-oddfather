@@ -8,7 +8,7 @@ type GameContainerProps = {
 
 const GameContainer = ({ games, sport }: GameContainerProps) => (
   <div className='game-container'>
-    <h4>{sport}</h4>
+    <h4 className='game-container-heading'>{sport}</h4>
     <div className='game-content'>
       {games &&
         games.map(game => (

@@ -6,7 +6,7 @@ type LogoProps = {
 };
 
 const Logo = ({ logo, shortname }: LogoProps) => (
-  <div>
+  <div className='logo-container'>
     <img
       height='50px'
       width='50px'

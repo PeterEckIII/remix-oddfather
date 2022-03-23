@@ -1161,6 +1161,78 @@ export const byConferenceAndDivision = /* GraphQL */ `
     }
   }
 `;
+
+export const getTruncatedGame = /* GraphQL */ `
+  query GetGameWithoutTeamGames($id: ID!) {
+    getGame(id: $id) {
+      id
+      boxscoreIndex
+      type
+      sport
+      homeTeamID
+      awayTeamID
+      homeScore
+      awayScore
+      venue
+      datetimeEpoch
+      gameDate
+      gameTime
+      createdAt
+      updatedAt
+      homeTeam {
+        id
+        sport
+        name
+        shortname
+        city
+        state
+        stadium
+        league
+        conference
+        division
+        createdAt
+        updatedAt
+      }
+      awayTeam {
+        id
+        sport
+        name
+        shortname
+        city
+        state
+        stadium
+        league
+        conference
+        division
+        createdAt
+        updatedAt
+      }
+      odds {
+        moneylineAwayOpen
+        moneylineAwayClose
+        moneylineHomeOpen
+        moneylineHomeClose
+        spreadAwayOpen
+        spreadAwayClose
+        spreadHomeOpen
+        spreadHomeClose
+        spreadAwayOpenPayout
+        spreadAwayClosePayout
+        spreadHomeOpenPayout
+        spreadHomeClosePayout
+        totalOpen
+        totalClose
+        overPayoutOpen
+        overPayoutClose
+        underPayoutOpen
+        underPayoutClose
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
 export const getGame = /* GraphQL */ `
   query GetGame($id: ID!) {
     getGame(id: $id) {

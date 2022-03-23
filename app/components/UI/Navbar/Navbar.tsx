@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Link, LoaderFunction, useFetcher, useLoaderData } from 'remix';
+import { useState } from 'react';
+import { NavLink } from 'remix';
 import type { LinksFunction } from 'remix';
 import styles from './styles.css';
 import { FiMenu, FiX } from 'react-icons/fi';
@@ -13,32 +13,32 @@ const Navbar = () => {
 
   return (
     <div className='navbar'>
-      <Link className='nav-logo' to='/'>
+      <NavLink className='nav-logo' to='/dashboard'>
         OF
-      </Link>
+      </NavLink>
       <div className='nav-icon' onClick={handleClick}>
         {open ? <FiX /> : <FiMenu />}
       </div>
       <ul className={open ? 'nav-links active' : 'nav-links'}>
         <li className='nav-item' onClick={closeMobileMenu}>
-          <Link to='/' className='nav-link'>
+          <NavLink to='/dashboard' className='nav-link'>
             Home
-          </Link>
+          </NavLink>
         </li>
         <li className='nav-item' onClick={closeMobileMenu}>
-          <Link to='/profile' className='nav-link'>
+          <NavLink to='/profile' className='nav-link'>
             Profile
-          </Link>
+          </NavLink>
         </li>
         <li className='nav-item' onClick={closeMobileMenu}>
-          <Link to='/login' className='nav-link'>
+          <NavLink to='/login' className='nav-link'>
             Login
-          </Link>
+          </NavLink>
         </li>
         <li className='nav-item' onClick={closeMobileMenu}>
-          <Link to='/logout' className='nav-link'>
+          <NavLink to='/logout' className='nav-link'>
             Log Out
-          </Link>
+          </NavLink>
         </li>
       </ul>
     </div>

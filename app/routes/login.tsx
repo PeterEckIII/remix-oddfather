@@ -7,7 +7,7 @@ import {
   useTransition,
 } from 'remix';
 import stylesUrl from '../styles/login.css';
-import { createUserSession } from '~/utils/session.server';
+import { createUserSession } from '~/sessions';
 import { login } from '~/utils/cognito.server';
 import ValidationMessage from '~/components/ValidationMessage';
 import Input from '~/components/Input';
@@ -66,6 +66,7 @@ export const action: ActionFunction = async ({ request }) => {
     email: validateEmail(email),
     password: validatePassword(password),
   };
+
   if (Object.values(fieldErrors).some(Boolean)) {
     console.log(`Errors: ${JSON.stringify(fieldErrors, null, 2)}`);
     return badRequest({ fieldErrors, fields });

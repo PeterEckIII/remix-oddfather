@@ -1,13 +1,14 @@
 import { gql } from '@apollo/client';
 import { LoaderFunction, MetaFunction, LinksFunction } from 'remix';
-import { Link, useLoaderData, useCatch, useParams, redirect } from 'remix';
+import { useLoaderData, useCatch, useParams, redirect } from 'remix';
 import GamePageDisplay from '~/components/Game/GamePage/GamePageDisplay';
 import type { Game } from '~/types';
 import { client } from '~/utils/api.server';
-import { getUserSession } from '~/utils/cognito.server';
-import { getGame } from '~/utils/queries';
+import { getUserSession } from '~/sessions';
+import { getTruncatedGame } from '~/utils/queries';
 import stylesUrl from '~/styles/game.css';
 import { sportSwap } from '~/utils/sportSwap';
+import { links as tableLink } from '~/components/Table/Table/Table';
 
 export const meta: MetaFunction = ({
   data,
@@ -30,6 +31,7 @@ export const meta: MetaFunction = ({
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: stylesUrl },
+  ...tableLink(),
 ];
 
 interface LoaderData extends Game {
@@ -41,7 +43,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (!authenticated.data.userId) return redirect('/login');
   const id = params.gameId;
   const GET_GAME = gql`
-    ${getGame}
+    ${getTruncatedGame}
   `;
 
   const results = await client.query({
@@ -56,7 +58,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export default function GameRoute() {
   const game = useLoaderData<LoaderData>();
-  console.log(`Odds: ${JSON.stringify(game.odds, null, 2)}`);
+  console.log(`Game: ${JSON.stringify(game, null, 2)}`);
   return (
     <div className='gamepage-container'>
       <GamePageDisplay game={game} />

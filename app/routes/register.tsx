@@ -9,7 +9,7 @@ import {
   useTransition,
 } from 'remix';
 import stylesUrl from '../styles/register.css';
-import { createUserSession } from '~/utils/session.server';
+import { createUserSession } from '~/sessions';
 import { signUp } from '~/utils/cognito.server';
 import ValidationMessage from '~/components/ValidationMessage';
 import Button from '~/components/Button';

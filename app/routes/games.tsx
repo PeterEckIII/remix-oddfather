@@ -2,10 +2,10 @@ import { Outlet } from 'remix';
 
 export default function GamesRoute() {
   return (
-    <div>
-      <main>
+    <main>
+      <div>
         <Outlet />
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }

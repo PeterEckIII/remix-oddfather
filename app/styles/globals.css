@@ -39,6 +39,11 @@ a {
   z-index: 1000;
 }
 
+.footer-links {
+  display: flex;
+  position: fixed;
+}
+
 .tooltip-wrapper {
   display: inline-block;
   position: relative;

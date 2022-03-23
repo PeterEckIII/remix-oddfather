@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, LinksFunction } from 'remix';
+import { NavLink, LinksFunction } from 'remix';
 import { FiMenu, FiX } from 'react-icons/fi';
 import styles from './styles.css';
 
@@ -12,22 +12,22 @@ const UnauthNavbar = () => {
 
   return (
     <div className='navbar'>
-      <Link className='nav-logo' to='/'>
+      <NavLink className='nav-logo' to='/'>
         OF
-      </Link>
+      </NavLink>
       <div className='nav-icon' onClick={handleClick}>
         {open ? <FiX /> : <FiMenu />}
       </div>
       <ul className={open ? 'nav-links active' : 'nav-links'}>
         <li className='nav-item' onClick={closeMobileMenu}>
-          <Link to='/register' className='nav-link'>
+          <NavLink to='/register' className='nav-link'>
             Sign Up
-          </Link>
+          </NavLink>
         </li>
         <li className='nav-item' onClick={closeMobileMenu}>
-          <Link to='/login' className='nav-link'>
+          <NavLink to='/login' className='nav-link'>
             Login
-          </Link>
+          </NavLink>
         </li>
       </ul>
     </div>

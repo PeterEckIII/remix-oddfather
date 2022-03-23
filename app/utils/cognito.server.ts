@@ -5,26 +5,11 @@ import {
   AuthenticationDetails,
   CognitoUserSession,
 } from 'amazon-cognito-identity-js';
-import { createCookieSessionStorage, redirect } from 'remix';
+import { redirect } from 'remix';
 
+import storage, { getUserSession } from '~/sessions';
 import { promisify } from 'util';
 import awsmobile from './awsExports';
-
-const storage = createCookieSessionStorage({
-  cookie: {
-    name: 'OF_session',
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 60 * 60 * 24 * 30,
-    httpOnly: true,
-  },
-});
-
-export function getUserSession(request: Request) {
-  const cookie = storage.getSession(request.headers.get('Cookie')) || undefined;
-  return cookie;
-}
 
 export async function getUser() {
   const poolData = {
@@ -54,16 +39,6 @@ export async function requireUserId(
     throw redirect(`/login?${searchParams}`);
   }
   return userId;
-}
-
-export async function createUserSession(userId: string, redirectTo: string) {
-  const session = await storage.getSession();
-  session.set('userId', userId);
-  return redirect(redirectTo, {
-    headers: {
-      'Set-Cookie': await storage.commitSession(session),
-    },
-  });
 }
 
 type AccessCredentials = {

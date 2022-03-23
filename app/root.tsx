@@ -18,7 +18,8 @@ import Navbar from '~/components/UI/Navbar';
 import { links as navbarLinks } from '~/components/UI/Navbar/Navbar';
 import UnauthNavbar from './components/UI/UnauthNavbar';
 import { links as unauthNavbarLinks } from '~/components/UI/UnauthNavbar/UnauthNavbar';
-import { getUserSession } from './utils/cognito.server';
+import { getUserSession } from './sessions';
+import Footer from './components/Footer';
 
 export const links: LinksFunction = () => {
   return [
@@ -94,6 +95,7 @@ function Document({
       <body>
         {data ? <Navbar /> : <UnauthNavbar />}
         {children}
+        <Footer data={data} />
         <Scripts />
         {process.env.NODE_ENV === 'development' ? <LiveReload /> : null}
       </body>

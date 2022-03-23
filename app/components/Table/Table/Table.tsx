@@ -21,13 +21,14 @@ const Table = ({
   prepareRow,
   tableName,
 }: NewTableProps) => (
-  <div>
+  <div className='table-container'>
     <h1 className='table-name'>{tableName}</h1>
-    <div className='table-container'>
-      <table className='table' {...getTableProps()}>
+    <div className='table-content'>
+      <table role='table' {...getTableProps()}>
         <thead className='table-head'>
           {headerGroups.map((headerGroup: HeaderGroup) => (
             <tr
+              role='row'
               className='table-header-row'
               {...headerGroup.getHeaderGroupProps()}
             >
@@ -43,7 +44,7 @@ const Table = ({
           {rows.map(row => {
             prepareRow(row);
             return (
-              <tr className='table-body-row' {...row.getRowProps()}>
+              <tr role='row' className='table-body-row' {...row.getRowProps()}>
                 {row.cells.map(cell => {
                   return (
                     <td className='table-data' {...cell.getCellProps()}>

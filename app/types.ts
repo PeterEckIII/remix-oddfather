@@ -70,3 +70,11 @@ export type GameDay = {
   ncaab: GameItem;
   ncaaf: GameItem;
 };
+
+export function assertDefined<T>(
+  value: T | null | undefined
+): asserts value is T {
+  if (value === null || value === undefined) {
+    throw new Error(`Expected defined value but got ${value}`);
+  }
+}

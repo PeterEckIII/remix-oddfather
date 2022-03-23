@@ -10,7 +10,7 @@ import {
 } from 'remix';
 
 import stylesUrl from '../styles/confirm-register.css';
-import { createUserSession } from '~/utils/session.server';
+import { createUserSession } from '~/sessions';
 import { confirmSignUp } from '~/utils/cognito.server';
 import ValidationMessage from '~/components/ValidationMessage';
 import Button from '~/components/Button';

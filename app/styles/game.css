@@ -5,12 +5,12 @@
   flex-direction: column;
   box-shadow: var(--main-box-shadow);
   margin: auto 0;
-  width: 85%;
 }
 
 .game-page-heading {
-  margin: 0.5rem;
+  margin: 2rem;
   text-align: center;
+  color: var(--main-bg-color);
 }
 
 .competitor-display {

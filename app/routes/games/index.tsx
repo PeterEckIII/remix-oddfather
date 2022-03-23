@@ -32,47 +32,21 @@ export default function GamesRoute() {
   const data = useLoaderData();
   return (
     <div>
-      <header>
-        <h1>
-          <Link prefetch='intent' to='/' aria-label='Oddfather Betting'>
-            <span className='logo'>OF</span>
-            <span className='logo-medium'>OddFather</span>
-          </Link>
-        </h1>
-        {data.user ? (
-          <div className='user-info'>
-            <span>{`Hi ${data.user.username}`}</span>
-            <Form reloadDocument action='/logout' method='post'>
-              <button type='submit' className='button'>
-                Logout
-              </button>
-            </Form>
-          </div>
-        ) : (
-          <Link prefetch='intent' to='/login'>
-            Login
-          </Link>
-        )}
-      </header>
-      <main>
-        <div>
-          <ul>
-            {data.games.map((game: Game) => {
-              return (
-                <li key={game.id}>
-                  {game.homeScore} - {game.awayScore}
-                  <Link prefetch='intent' to={game.id}>
-                    {game.boxscoreIndex}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-        <div className='games-outlet'>
-          <Outlet />
-        </div>
-      </main>
+      <ul>
+        {data.games.map((game: Game) => {
+          return (
+            <li key={game.id}>
+              {game.homeScore} - {game.awayScore}
+              <Link prefetch='intent' to={game.id}>
+                {game.boxscoreIndex}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+      <div className='games-outlet'>
+        <Outlet />
+      </div>
     </div>
   );
 }

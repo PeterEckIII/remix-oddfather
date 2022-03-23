@@ -1,6 +1,6 @@
 import styles from './styles.css';
 import { LinksFunction } from 'remix';
-import { Game } from '~/types';
+import { Game, Odd } from '~/types';
 import { teams } from '~/utils/returnTeamLogo';
 
 import SpreadTable from '~/components/Table/Spread';
